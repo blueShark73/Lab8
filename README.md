@@ -1,2 +1,2 @@
 # Lab8
-ITMO programming, Lan work 8
+ITMO programming, Lab work 8
