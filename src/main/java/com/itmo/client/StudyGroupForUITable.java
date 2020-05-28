@@ -12,8 +12,6 @@ import lombok.Setter;
 public class StudyGroupForUITable {
     private Long id;
     private String name;
-    private Long x;
-    private Long y;
     private String creationDate;
     private Long studentsCount;
     private String formOfEducation;
@@ -22,8 +20,6 @@ public class StudyGroupForUITable {
     private Long height;
     private Long weight;
     private String passportID;
-    private Double xAdmin;
-    private Long yAdmin;
     private String locationName;
     private String owner;
 
@@ -32,8 +28,6 @@ public class StudyGroupForUITable {
         Location location = person.getLocation();
         id = studyGroup.getId();
         name = studyGroup.getName();
-        x = studyGroup.getCoordinates().getX();
-        y = studyGroup.getCoordinates().getY();
         creationDate = DateTimeAdapter.parseToString(studyGroup.getCreationDate());
         studentsCount = studyGroup.getStudentsCount();
         formOfEducation = studyGroup.getFormOfEducation().getEnglish();
@@ -42,8 +36,6 @@ public class StudyGroupForUITable {
         height = person.getHeight();
         weight = person.getWeight();
         passportID = person.getPassportID();
-        xAdmin = location.getX();
-        yAdmin = location.getY();
         locationName = location.getName();
         owner = studyGroup.getOwner();
     }
