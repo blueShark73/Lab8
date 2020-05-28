@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,9 +33,7 @@ public class AuthController implements Initializable {
     @FXML
     private Text authState;
 
-    @FXML
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public void setHandlers(Stage currentStage, MainController mainController){
         EventHandler<ActionEvent> handler = actionEvent -> {
             String userName = userNameTextField.getText();
             String pass = passwordField.getText();
@@ -43,6 +42,8 @@ public class AuthController implements Initializable {
                 UIMain.USERNAME = userNameTextField.getText();
                 UIMain.PASSWORD = passwordField.getText();
                 UIMain.GENERATE_PASS_FOR_USER = authCheckBox.isSelected();
+                currentStage.close();
+                mainController.setValues();
             }
             else {
                 authState.setText("Username or password is not correct");
@@ -51,5 +52,11 @@ public class AuthController implements Initializable {
         };
         loginButton.setOnAction(handler);
         registerButton.setOnAction(handler);
+    }
+
+    @FXML
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        UIMain.authController = this;
     }
 }

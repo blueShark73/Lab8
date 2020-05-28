@@ -1,5 +1,6 @@
 package com.itmo.client;
 
+import com.itmo.client.controllers.AuthController;
 import com.itmo.client.controllers.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ public class UIMain extends Application {
     public static boolean GENERATE_PASS_FOR_USER;
     private static final int MIN_DISTANCE = 10;
     public static MainController mainController;
+    public static AuthController authController;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -203,30 +205,40 @@ public class UIMain extends Application {
         authStage.setScene(new Scene(auth));
         authStage.show();
 
-
+        authController.setHandlers(authStage, mainController);
     }
 
     public static void main(String[] args) {
         launch();
     }
 
-    public static void drawElement(int x, int y, Color color, Canvas canvas) {
+    public static void drawElement(int x, int y, int size, Color color, Canvas canvas) {
         x = fromNormalXToCanvasX(x, canvas);
         y = fromNormalYToCanvasY(y, canvas);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
         graphicsContext.setFill(color);
         graphicsContext.setLineWidth(1);
         graphicsContext.setStroke(color);
+        drawHuman(x, y, graphicsContext);
+        if (size == 1) return;
         x -= 6;
-        for (int i = 0; i < 3; i++) {
-            graphicsContext.fillOval(x - 3, y - 3, 6, 6);
-            graphicsContext.strokeLine(x, y + 3, x, y + 8);
-            graphicsContext.strokeLine(x, y + 8, x - 3, y + 12);
-            graphicsContext.strokeLine(x, y + 8, x + 3, y + 12);
-            graphicsContext.strokeLine(x, y + 3, x + 3, y + 9);
-            graphicsContext.strokeLine(x, y + 3, x - 3, y + 9);
-            x += 6;
-        }
+        drawHuman(x, y, graphicsContext);
+        x += 12;
+        drawHuman(x, y, graphicsContext);
+        if (size < 11) return;
+        x -= 18;
+        drawHuman(x, y, graphicsContext);
+        x += 24;
+        drawHuman(x, y, graphicsContext);
+    }
+
+    private static void drawHuman(int x, int y, GraphicsContext graphicsContext) {
+        graphicsContext.fillOval(x - 3, y - 3, 6, 6);
+        graphicsContext.strokeLine(x, y + 3, x, y + 8);
+        graphicsContext.strokeLine(x, y + 8, x - 3, y + 12);
+        graphicsContext.strokeLine(x, y + 8, x + 3, y + 12);
+        graphicsContext.strokeLine(x, y + 3, x + 3, y + 9);
+        graphicsContext.strokeLine(x, y + 3, x - 3, y + 9);
     }
 
     public static void drawAxis(Canvas canvas) {

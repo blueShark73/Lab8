@@ -6,6 +6,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="233.0" prefWidth="228.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.itmo.client.controllers.AuthController">
@@ -17,6 +18,10 @@
       <CheckBox fx:id="authCheckBox" layoutX="14.0" layoutY="121.0" mnemonicParsing="false" text="Generate password automatically" />
       <Button fx:id="loginButton" layoutX="21.0" layoutY="165.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Sign in" />
       <Button fx:id="registerButton" layoutX="127.0" layoutY="165.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="78.0" text="Sign up" />
-      <Text fx:id="authState" layoutX="102.0" layoutY="215.0" strokeType="OUTSIDE" strokeWidth="0.0" text="      " />
+      <HBox alignment="CENTER" layoutX="6.0" layoutY="191.0" prefHeight="26.0" prefWidth="214.0">
+         <children>
+            <Text fx:id="authState" strokeType="OUTSIDE" strokeWidth="0.0" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

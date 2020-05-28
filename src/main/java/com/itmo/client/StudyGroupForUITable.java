@@ -13,6 +13,8 @@ public class StudyGroupForUITable {
     private Long id;
     private String name;
     private String creationDate;
+    private Long x;
+    private Long y;
     private Long studentsCount;
     private String formOfEducation;
     private String semester;
@@ -28,6 +30,8 @@ public class StudyGroupForUITable {
         Location location = person.getLocation();
         id = studyGroup.getId();
         name = studyGroup.getName();
+        x = studyGroup.getCoordinates().getX();
+        y = studyGroup.getCoordinates().getY();
         creationDate = DateTimeAdapter.parseToString(studyGroup.getCreationDate());
         studentsCount = studyGroup.getStudentsCount();
         formOfEducation = studyGroup.getFormOfEducation().getEnglish();
