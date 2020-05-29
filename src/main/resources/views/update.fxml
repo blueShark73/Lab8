@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="445.0" prefWidth="301.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.itmo.client.controllers.UpdateController">
+    <children>
+        <Label layoutX="14.0" layoutY="14.0" text="Name:" />
+        <Label layoutX="14.0" layoutY="39.0" text="Coordinate X:" />
+        <Label layoutX="14.0" layoutY="65.0" text="Coordinate Y:" />
+        <Label layoutX="14.0" layoutY="89.0" text="StudentsCount:" />
+        <Label layoutX="14.0" layoutY="116.0" text="FormOfEducation:" />
+        <Label layoutX="14.0" layoutY="144.0" text="Semester:" />
+        <Label layoutX="14.0" layoutY="168.0" text="AdminName:" />
+        <Label layoutX="14.0" layoutY="191.0" text="Height:" />
+        <Label layoutX="14.0" layoutY="216.0" text="Weight:" />
+        <Label layoutX="14.0" layoutY="240.0" text="PassportID:" />
+        <Label layoutX="14.0" layoutY="267.0" text="Location X:" />
+        <Label layoutX="14.0" layoutY="291.0" text="Location Y:" />
+        <Label layoutX="14.0" layoutY="319.0" text="Location Name:" />
+      <Label layoutX="14.0" layoutY="345.0" text="Id:" />
+        <TextField layoutX="155.0" layoutY="35.0" prefHeight="26.0" prefWidth="103.0" fx:id="xField" />
+        <TextField fx:id="yField" layoutX="154.0" layoutY="60.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="studentsCountField" layoutX="155.0" layoutY="85.0" prefHeight="26.0" prefWidth="103.0" />
+        <ChoiceBox fx:id="formChoiceBox" layoutX="135.0" layoutY="112.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="semesterChoiceBox" layoutX="135.0" layoutY="140.0" prefWidth="150.0" />
+        <TextField fx:id="adminNameField" layoutX="158.0" layoutY="164.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="heightField" layoutX="158.0" layoutY="186.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="weightField" layoutX="158.0" layoutY="211.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="passportIdField" layoutX="158.0" layoutY="235.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="locationXField" layoutX="158.0" layoutY="262.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="locationYField" layoutX="158.0" layoutY="286.0" prefHeight="26.0" prefWidth="103.0" />
+        <TextField fx:id="locationNameField" layoutX="158.0" layoutY="314.0" prefHeight="26.0" prefWidth="103.0" />
+      <Label fx:id="idLabel" layoutX="188.0" layoutY="345.0" text="Label" />
+      <TextField fx:id="nameField" layoutX="155.0" layoutY="10.0" prefHeight="26.0" prefWidth="103.0" />
+      <Button fx:id="updateButton" layoutX="99.0" layoutY="371.0" mnemonicParsing="false" onAction="#click" text="Update element" />
+      <HBox alignment="CENTER" layoutX="1.0" layoutY="404.0" prefHeight="26.0" prefWidth="301.0">
+         <children>
+            <Text fx:id="stateText" strokeType="OUTSIDE" strokeWidth="0.0">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+    </children>
+</AnchorPane>

@@ -17,7 +17,7 @@ public class UIMain extends Application {
     public static String USERNAME;
     public static String PASSWORD;
     public static boolean GENERATE_PASS_FOR_USER;
-    private static final int MIN_DISTANCE = 10;
+    public static final int MIN_DISTANCE = 10;
     public static MainController mainController;
     public static AuthController authController;
 

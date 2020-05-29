@@ -34,17 +34,16 @@
                 <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="Exit" />
             </children>
         </HBox>
-        <HBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="34.0" prefHeight="34.0" prefWidth="1104.0" spacing="10.0">
+        <HBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="34.0" prefHeight="34.0" prefWidth="1104.0" spacing="15.0">
             <children>
-                <Button fx:id="addButton" mnemonicParsing="false" text="Add element" />
-                <Button fx:id="addIfMinButton" mnemonicParsing="false" text="Add if min" />
-                <Button fx:id="addIfMaxButton" mnemonicParsing="false" text="Add if max" />
+            <Button fx:id="executeButton" mnemonicParsing="false" text="Execute script" />
+            <Button fx:id="sumButton" mnemonicParsing="false" text="Sum of studetsCount" />
                 <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" />
                 <Button fx:id="helpButton" mnemonicParsing="false" text="Help me" />
                 <Button fx:id="historyButton" mnemonicParsing="false" text="History" />
                 <Button fx:id="infoButton" mnemonicParsing="false" text="Information about collection" />
-                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" text="Remove element" />
-                <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" text="Update fields" />
+                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemove" text="Remove element" />
+                <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickUpdateButton" text="Update fields" />
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" layoutY="68.0" prefHeight="38.0" prefWidth="1102.0" spacing="10.0">
@@ -59,9 +58,9 @@
                 <Insets left="10.0" />
             </padding>
         </HBox>
-        <FlowPane layoutY="98.0" prefHeight="321.0" prefWidth="1101.0">
+        <FlowPane layoutY="140.0" prefHeight="239.0" prefWidth="1102.0">
             <children>
-                <TableView fx:id="tableView" prefHeight="322.0" prefWidth="1101.0">
+                <TableView fx:id="tableView" prefHeight="278.0" prefWidth="1100.0">
                     <columns>
                         <TableColumn fx:id="idColumn" prefWidth="59.19998246431351" text="Id" />
                         <TableColumn fx:id="nameColumn" prefWidth="91.20000839233398" text="Name" />
@@ -85,7 +84,20 @@
         </FlowPane>
       <FlowPane layoutY="421.0" prefHeight="360.0" prefWidth="1100.0">
          <children>
-            <Canvas fx:id="canvas" height="360.0" width="1100.0" />
+            <Canvas fx:id="canvas" height="320.0" onMouseClicked="#clickCanvas" width="1100.0" />
          </children></FlowPane>
+      <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="101.0" prefHeight="38.0" prefWidth="1100.0" spacing="10.0">
+         <children>
+            <Label text="Element's name for adding:">
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <TextField fx:id="nameTextField" prefHeight="26.0" prefWidth="123.0" />
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#clickAddButton" text="Add" />
+                <Button fx:id="addIfMinButton" mnemonicParsing="false" onAction="#clickAddIfMinButton" text="Add if min" />
+                <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#clickAddIfMaxButton" text="Add if max" />
+         </children>
+      </HBox>
     </children>
 </AnchorPane>

@@ -1,9 +1,12 @@
 package com.itmo.app;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -26,5 +29,13 @@ public enum FormOfEducation implements Serializable {
             System.out.println(messageIfNull);
             return null;
         }
+    }
+
+    public static FormOfEducation getValueByEnglish(String value){
+        return Arrays.stream(values()).filter(formOfEducation -> formOfEducation.getEnglish().equals(value)).findAny().orElse(null);
+    }
+
+    public static ObservableList<String> getItems(){
+        return FXCollections.observableArrayList(FormOfEducation.FULL_TIME_EDUCATION.getEnglish(), FormOfEducation.DISTANCE_EDUCATION.getEnglish(), FormOfEducation.EVENING_CLASSES.getEnglish());
     }
 }

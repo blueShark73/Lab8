@@ -5,10 +5,12 @@ import com.itmo.app.Person;
 import com.itmo.app.StudyGroup;
 import com.itmo.utils.DateTimeAdapter;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class StudyGroupForUITable {
     private Long id;
     private String name;
@@ -22,6 +24,8 @@ public class StudyGroupForUITable {
     private Long height;
     private Long weight;
     private String passportID;
+    private Double locationX;
+    private Long locationY;
     private String locationName;
     private String owner;
 
@@ -40,6 +44,8 @@ public class StudyGroupForUITable {
         height = person.getHeight();
         weight = person.getWeight();
         passportID = person.getPassportID();
+        locationX = location.getX();
+        locationY = location.getY();
         locationName = location.getName();
         owner = studyGroup.getOwner();
     }

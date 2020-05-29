@@ -1,9 +1,12 @@
 package com.itmo.app;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -29,5 +32,13 @@ public enum Semester implements Serializable {
             System.out.println(messageIfNull);
             return null;
         }
+    }
+
+    public static Semester getValueByEnglish(String value){
+        return Arrays.stream(values()).filter(semester -> semester.english.equals(value)).findAny().orElse(null);
+    }
+
+    public static ObservableList<String> getItems(){
+        return FXCollections.observableArrayList(Semester.THIRD.getEnglish(), Semester.FOURTH.getEnglish(), Semester.FIFTH.getEnglish(), Semester.SIXTH.getEnglish(), Semester.EIGHTH.getEnglish());
     }
 }

@@ -1,6 +1,7 @@
 package com.itmo.utils;
 
 
+import com.itmo.client.StudyGroupForUITable;
 import com.itmo.exceptions.InputFormatException;
 
 /**
@@ -70,5 +71,16 @@ public class FieldsValidator {
                 return false;
         }
         return true;
+    }
+
+    public static boolean complexCheckFields(StudyGroupForUITable group){
+        return checkNumber(group.getX(), -550, 550, "", false) &&
+                checkNumber(group.getY(), -160, 160, "", false) &&
+                checkNumber(group.getStudentsCount(), 1, 50, "", false) &&
+                checkNumber((long)group.getAdminName().length(), 2, 19, "", false) &&
+                checkNumber(group.getHeight(), 0, 300, "", false) &&
+                checkNumber(group.getWeight(), 0, 300, "", false) &&
+                checkNumber((long)group.getPassportID().length(), 6, 24, "", false) &&
+                (group.getLocationName()==null || group.getLocationName().length()<20);
     }
 }
