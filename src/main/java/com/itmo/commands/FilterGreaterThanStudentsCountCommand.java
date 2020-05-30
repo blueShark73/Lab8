@@ -28,6 +28,7 @@ public class FilterGreaterThanStudentsCountCommand extends Command implements Co
         application.getSortedCollection().stream().filter(studyGroup -> studyGroup.getStudentsCount() > studentsCount)
                 .forEach(studyGroup -> result.append(studyGroup.toString()).append("\n"));
         if (application.getCollection().isEmpty()) return "Коллекция пуста...";
+        successfullyExecute = true;
         return result.length() > 0 ? result.deleteCharAt(result.length() - 1).toString() : "Таких элементов в коллекции нет";
     }
 

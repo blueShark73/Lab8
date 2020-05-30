@@ -5,6 +5,7 @@ import com.itmo.utils.SerializationManager;
 import com.itmo.commands.Command;
 import com.itmo.exceptions.StackIsLimitedException;
 import com.itmo.server.Response;
+import lombok.Getter;
 
 import java.io.*;
 import java.net.*;
@@ -16,6 +17,7 @@ public class Client {
     private SocketAddress socketAddress;
     private DatagramSocket socket;
     private Handler handler;
+    @Getter
     private User user;
     private SerializationManager<Command> commandSerializationManager = new SerializationManager<>();
     private SerializationManager<Response> responseSerializationManager = new SerializationManager<>();
@@ -47,8 +49,8 @@ public class Client {
     }
 
     //отправляем команду и ждем ответа
-    public void sendCommandAndReceiveAnswer(Command command) {
-        try {
+    public Response sendCommandAndReceiveAnswer(Command command) throws IOException, ClassNotFoundException{
+        //try {
             command.setUser(user);
             byte[] commandInBytes = commandSerializationManager.writeObject(command);
             DatagramPacket packet = new DatagramPacket(commandInBytes, commandInBytes.length, socketAddress);
@@ -58,19 +60,19 @@ public class Client {
             packet = new DatagramPacket(answerInBytes, answerInBytes.length);
             socket.receive(packet);
             Response response = responseSerializationManager.readObject(answerInBytes);
-            String result = response.getAnswer();
             if (user == null) {
                 if (response.getUser() != null) handler.setDefaultPack();
                 user = response.getUser();
             }
-            System.out.println("Получен ответ от сервера: ");
-            System.out.println(result);
+            return response;
+            /*
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Сервер в данный момент недоступен...");
         } catch (ClassNotFoundException e) {
             System.out.println("Клиент ждал ответ в виде Response, а получил что-то непонятное...");
         }
+        */
     }
 
     public int getScriptCount() {

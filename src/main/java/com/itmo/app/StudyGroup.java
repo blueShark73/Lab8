@@ -1,5 +1,6 @@
 package com.itmo.app;
 
+import com.itmo.client.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     private FormOfEducation formOfEducation; //Поле не может быть null
     private Semester semesterEnum; //Поле может быть null
     private Person groupAdmin; //Поле не может быть null
-    private String owner;
+    private User owner;
     private Scanner scanner;
 
     /**
@@ -42,7 +43,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
                 ", formOfEducation=" + formOfEducation +
                 ", semesterEnum=" + semesterEnum +
                 ", groupAdmin=" + groupAdmin.toString() +
-                ", owner='" + owner +
+                ", owner='" + owner.getName() +
                 "'}";
     }
 

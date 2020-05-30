@@ -53,6 +53,7 @@ public class UpdateCommand extends Command implements CommandWithInit {
                 throw new IdNotFoundException("Элемент нельзя обновить, т.к. он не принадлежит вам");
             }
             application.getCollection().add(studyGroup);
+            successfullyExecute = true;
             return "Элемент с id " + studyGroup.getId() + " обновлён";
         } catch (IdNotFoundException e) {
             return e.getMessage();

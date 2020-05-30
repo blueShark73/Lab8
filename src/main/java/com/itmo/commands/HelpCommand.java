@@ -9,6 +9,7 @@ import com.itmo.server.Session;
 public class HelpCommand extends Command {
     @Override
     public String execute(Application application, Session session) {
+        successfullyExecute = true;
         return "Доступные команды: " + "\n" +
                 new HelpCommand().getCommandInfo() + "\n" +
                 new InfoCommand().getCommandInfo() + "\n" +

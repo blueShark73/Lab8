@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class Response implements Serializable {
     private String answer;
     private User user;
+    private boolean successfullyExecute;
 
     public Response(String answer) {
         this.answer = answer;

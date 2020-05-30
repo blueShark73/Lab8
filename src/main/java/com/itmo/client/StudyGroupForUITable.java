@@ -4,14 +4,17 @@ import com.itmo.app.Location;
 import com.itmo.app.Person;
 import com.itmo.app.StudyGroup;
 import com.itmo.utils.DateTimeAdapter;
+import javafx.scene.paint.Color;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
-public class StudyGroupForUITable {
+public class StudyGroupForUITable implements Serializable {
     private Long id;
     private String name;
     private String creationDate;
@@ -28,6 +31,7 @@ public class StudyGroupForUITable {
     private Long locationY;
     private String locationName;
     private String owner;
+    private Color color;
 
     public StudyGroupForUITable(StudyGroup studyGroup){
         Person person = studyGroup.getGroupAdmin();
@@ -47,6 +51,7 @@ public class StudyGroupForUITable {
         locationX = location.getX();
         locationY = location.getY();
         locationName = location.getName();
-        owner = studyGroup.getOwner();
+        owner = studyGroup.getOwner().getName();
+        color = studyGroup.getOwner().getColor();
     }
 }

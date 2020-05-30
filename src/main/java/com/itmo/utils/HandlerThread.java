@@ -1,6 +1,7 @@
 package com.itmo.utils;
 
 import com.itmo.app.Application;
+import com.itmo.commands.AddListenerCommand;
 import com.itmo.commands.Command;
 import com.itmo.commands.ExitCommand;
 import com.itmo.server.Response;
@@ -30,6 +31,10 @@ public class HandlerThread extends Thread {
             Command command = new SerializationManager<Command>().readObject(data);
             log.info("Server receive command " + command.toString());
             Session session = application.getSession(command.getUser());
+            if(command instanceof AddListenerCommand) {
+                ((AddListenerCommand) command).setSocketAddress(socketAddress);
+                application.sendCollectionToClient(datagramChannel, socketAddress);
+            }
             String result;
             try {
                 result = command.execute(application, session);
@@ -39,7 +44,7 @@ public class HandlerThread extends Thread {
                 result = "Ошибка на сервере. Команда не выполнена" +
                         "\nАктивная сессия не найлена, видимо сервер отключился на некоторое время, перезапустите клиента";
             }
-            Response response = new Response(result, command.getUser());
+            Response response = new Response(result, command.getUser(), command.isSuccessfullyExecute());
             log.info("Command " + command.toString() + " is completed, send an answer to the client");
             new SenderThread(datagramChannel, socketAddress, response).start();
         } catch (ClassNotFoundException | IOException e) {

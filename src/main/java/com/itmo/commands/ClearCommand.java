@@ -10,13 +10,14 @@ import lombok.NonNull;
 public class ClearCommand extends Command {
     @Override
     public String execute(Application application, @NonNull Session session) {
-        application.getDataBaseManager().removeAll(session.getUser());
+        application.getDataBaseManager().removeAll(session.getUser().getName());
         application.getCollection().forEach(studyGroup -> {
             if (studyGroup.getOwner().equals(session.getUser())) {
                 application.getIdList().remove(studyGroup.getId());
                 application.getCollection().remove(studyGroup);
             }
         });
+        successfullyExecute = true;
         return "Все элементы принадлежашие пользователю " + session.getUser() + " удалены.";
     }
 

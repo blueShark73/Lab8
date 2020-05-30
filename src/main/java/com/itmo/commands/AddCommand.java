@@ -31,6 +31,7 @@ public class AddCommand extends Command implements CommandWithInit{
         if(!application.getDataBaseManager().addGroup(studyGroup)) return "Элемент не добвлен. Проверьте корректность данных";
         application.getIdList().add(studyGroup.getId());
         application.getCollection().add(studyGroup);
+        successfullyExecute = true;
         return "Элемент с именем "+studyGroup.getName()+" добавлен в коллекцию";
     }
 

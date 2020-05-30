@@ -9,6 +9,7 @@ import com.itmo.server.Session;
 public class SumOfStudentsCountCommand extends Command {
     @Override
     public String execute(Application application, Session session) {
+        successfullyExecute = true;
         return "Всего студентов во всех грппах в коллекции: " + application.getSumOfStudentsCount();
     }
 

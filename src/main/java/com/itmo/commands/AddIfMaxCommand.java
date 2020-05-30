@@ -14,6 +14,7 @@ public class AddIfMaxCommand extends AddCommand {
         if (studyGroup.compareTo(application.getMaxStudyGroup()) > 0 && application.getDataBaseManager().addGroup(studyGroup)) {
             application.getCollection().add(studyGroup);
             application.getIdList().add(studyGroup.getId());
+            successfullyExecute = true;
             return "Элемент с именем "+studyGroup.getName()+" добавлен";
         }
         return "Элемент не добавлен";

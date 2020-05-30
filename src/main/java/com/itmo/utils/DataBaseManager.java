@@ -2,6 +2,7 @@ package com.itmo.utils;
 
 import com.itmo.app.*;
 import com.itmo.client.User;
+import javafx.scene.paint.Color;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -148,14 +149,34 @@ public class DataBaseManager {
     public void addUser(User user) {
         String salt = new SimplePasswordGenerator(true, true, true, true).generate(10, 10);
         String hash = passEncoder.getHash(user.getPass() + salt);
+        Color userColor = user.getColor();
         try {
-            PreparedStatement statement = connection.prepareStatement("insert into " + USERS_TABLE + " values (?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement("insert into " + USERS_TABLE + " values (?, ?, ?, ?, ?, ?)");
             statement.setString(1, user.getName());
             statement.setString(2, hash);
             statement.setString(3, salt);
+            statement.setDouble(4, userColor.getRed());
+            statement.setDouble(5, userColor.getGreen());
+            statement.setDouble(6, userColor.getBlue());
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    public Color getUserColor(User user){
+        try {
+            PreparedStatement statement = connection.prepareStatement("select red, green, blue from " + USERS_TABLE + " where name = ?");
+            statement.setString(1, user.getName());
+            ResultSet resultSet = statement.executeQuery();
+            Color color = null;
+            if(resultSet.next()){
+                color = Color.color(resultSet.getDouble("red"), resultSet.getDouble("green"), resultSet.getDouble("blue"));
+            }
+            return color;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
         }
     }
 

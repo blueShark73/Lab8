@@ -38,6 +38,7 @@ public class RemoveCommand extends Command implements CommandWithInit {
         } catch (IdNotFoundException e) {
             return e.getMessage();
         }
+        successfullyExecute = true;
         return "Элемент с id " + id + " удалён из коллекции";
     }
 

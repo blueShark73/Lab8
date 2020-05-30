@@ -40,6 +40,7 @@ public class ExecuteScriptCommand extends Command implements CommandWithInit {
      */
     @Override
     public String execute(Application application, Session session) {
+        successfullyExecute = true;
         return status;
     }
 

@@ -7,6 +7,7 @@ import com.itmo.server.Session;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.utils.SimplePasswordGenerator;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Console;
 import java.io.File;
@@ -18,6 +19,7 @@ import java.util.Scanner;
  * команда для регистрации пользователей
  */
 @Getter
+@Setter
 public class RegisterCommand extends Command implements CommandWithInit {
     private User userForRegistration;
 
@@ -26,9 +28,10 @@ public class RegisterCommand extends Command implements CommandWithInit {
     public String execute(Application application, Session session) {
         if (!application.getDataBaseManager().containsUserName(userForRegistration.getName())) {
             application.getDataBaseManager().addUser(userForRegistration);
-            Session sessionActual = new Session(userForRegistration.getName(), userForRegistration.getPass(), new CommandHistory(CommandHistory.DEFAULT_HISTORY_SIZE));
+            Session sessionActual = new Session(userForRegistration, new CommandHistory(CommandHistory.DEFAULT_HISTORY_SIZE));
             application.addSession(userForRegistration, sessionActual);
             user = userForRegistration;
+            successfullyExecute = true;
             return "Пользователь с ником " + userForRegistration.getName() + " успешно зарегистрирован\n" +
                     "Теперь вам доступны все команды, для их просмотра введите help";
         }

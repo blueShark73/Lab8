@@ -14,6 +14,7 @@ public class ExitCommand extends Command {
     @Override
     public String execute(Application application, @NonNull Session session) {
         application.removeSession(user, session);
+        successfullyExecute = true;
         return "Выход из приложения...";
     }
 

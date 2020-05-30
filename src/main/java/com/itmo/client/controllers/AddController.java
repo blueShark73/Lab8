@@ -3,6 +3,7 @@ package com.itmo.client.controllers;
 import com.itmo.app.*;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
+import com.itmo.client.User;
 import com.itmo.utils.FieldsValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -82,7 +83,7 @@ public class AddController implements Initializable {
             group.setGroupAdmin(person);
             group.setCreationDate(ZonedDateTime.now());
             group.setId(-1);
-            group.setOwner("-1");
+            group.setOwner(new User());
         } catch (NumberFormatException e){
             stateText.setText("Parsing error, check values");
             stateText.setFill(Color.RED);

@@ -1,14 +1,23 @@
 package com.itmo.app;
 
+import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.User;
 import com.itmo.exceptions.InputFormatException;
 import com.itmo.exceptions.SameIdException;
 import com.itmo.server.Session;
+import com.itmo.server.notifications.AddServerNotification;
+import com.itmo.server.notifications.ServerNotification;
 import com.itmo.utils.DataBaseManager;
 import com.itmo.utils.FieldsValidator;
+import com.itmo.utils.SerializationManager;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
 import java.sql.SQLException;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -117,5 +126,18 @@ public class Application {
     //удаление сессии
     public void removeSession(User user, Session session) {
         activeSessions.remove(user, session);
+    }
+
+    public void sendCollectionToClient(DatagramChannel datagramChannel, SocketAddress socketAddress){
+        SerializationManager<ServerNotification> serializationManager = new SerializationManager<>();
+        collection.forEach(studyGroup -> {
+            AddServerNotification notification = new AddServerNotification(new StudyGroupForUITable(studyGroup));
+            try {
+                ByteBuffer byteBuffer = ByteBuffer.wrap(serializationManager.writeObject(notification));
+                datagramChannel.send(byteBuffer, socketAddress);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

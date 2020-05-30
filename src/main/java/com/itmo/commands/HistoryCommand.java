@@ -11,6 +11,7 @@ import lombok.NonNull;
 public class HistoryCommand extends Command {
     @Override
     public String execute(Application application, @NonNull Session session) {
+        successfullyExecute = true;
         return session.getHistory().getHistory();
     }
 

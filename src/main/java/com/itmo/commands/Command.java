@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Setter
 public abstract class Command implements Serializable {
     User user;
+    boolean successfullyExecute;
 
     /**
      * метод исполнения команды

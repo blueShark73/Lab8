@@ -2,6 +2,7 @@ package com.itmo.client;
 
 import com.itmo.client.controllers.AuthController;
 import com.itmo.client.controllers.MainController;
+import com.itmo.server.Server;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,6 +21,10 @@ public class UIMain extends Application {
     public static final int MIN_DISTANCE = 10;
     public static MainController mainController;
     public static AuthController authController;
+    public static Client client;
+
+    public static final String HOST = "localhost";
+    public static final int PORT = 3876;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -195,6 +200,9 @@ public class UIMain extends Application {
         authorizationWindow.setScene(authScene);
         authorizationWindow.show();
          */
+
+        client = new Client();
+        client.connect(HOST, PORT);
 
         Parent root = FXMLLoader.load(getClass().getResource("/views/main.fxml"));
         stage.setScene(new Scene(root));

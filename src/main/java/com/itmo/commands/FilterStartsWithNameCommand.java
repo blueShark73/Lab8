@@ -24,6 +24,7 @@ public class FilterStartsWithNameCommand extends Command implements CommandWithI
         if (application.getCollection().isEmpty()) return "Коллекция пуста...";
         application.getSortedCollection().stream().filter(studyGroup -> new StringBuffer(studyGroup.getName()).indexOf(argument) == 0)
                 .forEach(studyGroup -> result.append(studyGroup.toString()).append("\n"));
+        successfullyExecute = true;
         return result.length() > 0 ? result.deleteCharAt(result.length() - 1).toString() : "Таких элементов в коллекции нет";
     }
 
