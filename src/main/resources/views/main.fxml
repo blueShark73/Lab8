@@ -49,10 +49,12 @@
         <HBox alignment="CENTER_LEFT" layoutY="68.0" prefHeight="38.0" prefWidth="1102.0" spacing="10.0">
             <children>
                 <Label text="Value:" />
-                <TextField fx:id="filterValue" prefHeight="26.0" prefWidth="137.0" />
+                <TextField fx:id="filteredValue" prefHeight="26.0" prefWidth="137.0" text=""/>
                 <Label text="Select column:" />
                 <ChoiceBox fx:id="fieldChoiceBox" prefWidth="150.0" />
-                <Button fx:id="findButton" mnemonicParsing="false" text="Find" />
+                <Button fx:id="findButton" mnemonicParsing="false" text="Find" onAction="#clickFindButton"/>
+            <Button fx:id="findGreaterButton" mnemonicParsing="false" text="Find greater" onAction="#clickFindGreaterButton"/>
+            <Button fx:id="findLessButton" mnemonicParsing="false" text="Find less" onAction="#clickFindLessButton"/>
             </children>
             <padding>
                 <Insets left="10.0" />

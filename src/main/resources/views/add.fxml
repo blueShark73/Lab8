@@ -24,7 +24,6 @@
       <Label layoutX="14.0" layoutY="267.0" text="Location X:" />
       <Label layoutX="14.0" layoutY="291.0" text="Location Y:" />
       <Label layoutX="14.0" layoutY="319.0" text="Location Name:" />
-      <Label fx:id="nameLabel" contentDisplay="CENTER" layoutX="192.0" layoutY="14.0" text="Label" />
       <TextField layoutX="155.0" layoutY="35.0" prefHeight="26.0" prefWidth="103.0" fx:id="xField" />
       <TextField fx:id="yField" layoutX="154.0" layoutY="60.0" prefHeight="26.0" prefWidth="103.0" />
       <TextField fx:id="studentsCountField" layoutX="155.0" layoutY="85.0" prefHeight="26.0" prefWidth="103.0" />
@@ -45,6 +44,11 @@
                   <Font size="14.0" />
                </font>
             </Text>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="135.0" layoutY="9.0" prefHeight="26.0" prefWidth="141.0">
+         <children>
+            <Label fx:id="nameLabel" text="Label" />
          </children>
       </HBox>
    </children>

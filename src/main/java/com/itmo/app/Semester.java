@@ -8,6 +8,7 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * текущий семестр для учебной группы
@@ -40,5 +41,9 @@ public enum Semester implements Serializable {
 
     public static ObservableList<String> getItems(){
         return FXCollections.observableArrayList(Semester.THIRD.getEnglish(), Semester.FOURTH.getEnglish(), Semester.FIFTH.getEnglish(), Semester.SIXTH.getEnglish(), Semester.EIGHTH.getEnglish());
+    }
+
+    public static int getNumberByEnglish(String english){
+        return Objects.requireNonNull(Arrays.stream(values()).filter(semester -> semester.english.equals(english)).findAny().orElse(null)).number;
     }
 }

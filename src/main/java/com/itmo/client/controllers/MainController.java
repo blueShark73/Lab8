@@ -1,5 +1,6 @@
 package com.itmo.client.controllers;
 
+import com.itmo.app.Semester;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.utils.FieldsValidator;
@@ -25,11 +26,7 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
-import java.util.Scanner;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class MainController implements Initializable {
     @FXML
@@ -109,6 +106,12 @@ public class MainController implements Initializable {
 
     @FXML
     private Button findButton;
+
+    @FXML
+    private Button findGreaterButton;
+
+    @FXML
+    private Button findLessButton;
 
     @FXML
     private Button executeButton;
@@ -192,6 +195,172 @@ public class MainController implements Initializable {
             addStage.show();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clickFindButton(){
+        String field = fieldChoiceBox.getValue();
+        String value = filteredValue.getText();
+        ObservableList<StudyGroupForUITable> filteredList = FXCollections.observableArrayList();
+        if(value.isEmpty()) {
+            tableView.setItems(studyGroups);
+            return;
+        }
+        try {
+            switch (field) {
+                case "Id":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId().equals(Long.parseLong(value)));
+                    break;
+                case "Name":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().contains(value));
+                    break;
+                case "CreationDate":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().equals(value));
+                    break;
+                case "StudentsCount":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount().equals(Long.parseLong(value)));
+                    break;
+                case "FormOfEducation":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().contains(value));
+                    break;
+                case "Semester":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getSemester().contains(value));
+                    break;
+                case "AdminName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().contains(value));
+                    break;
+                case "Height":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight().equals(Long.parseLong(value)));
+                    break;
+                case "Weight":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight().equals(Long.parseLong(value)));
+                    break;
+                case "PassportID":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().contains(value));
+                    break;
+                case "LocationName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().contains(value));
+                    break;
+                case "Owner":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().contains(value));
+                    break;
+            }
+            tableView.setItems(filteredList);
+        } catch (NumberFormatException e){
+            stateText.setFill(Color.RED);
+            stateText.setText("Parse error");
+        }
+
+    }
+
+    @FXML
+    private void clickFindGreaterButton(){
+        String field = fieldChoiceBox.getValue();
+        String value = filteredValue.getText();
+        ObservableList<StudyGroupForUITable> filteredList = FXCollections.observableArrayList();
+        if(value.isEmpty()) {
+            tableView.setItems(studyGroups);
+            return;
+        }
+        try {
+            switch (field) {
+                case "Id":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId()>Long.parseLong(value));
+                    break;
+                case "Name":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value)>0);
+                    break;
+                case "CreationDate":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value)>0);
+                    break;
+                case "StudentsCount":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount()>Long.parseLong(value));
+                    break;
+                case "FormOfEducation":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value)>0);
+                    break;
+                case "Semester":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester())>Semester.getNumberByEnglish(value));
+                    break;
+                case "AdminName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value)>0);
+                    break;
+                case "Height":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight()>Long.parseLong(value));
+                    break;
+                case "Weight":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight()>Long.parseLong(value));
+                    break;
+                case "PassportID":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value)>0);
+                    break;
+                case "LocationName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value)>0);
+                    break;
+                case "Owner":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value)>0);
+                    break;
+            }
+            tableView.setItems(filteredList);
+        } catch (NumberFormatException | NullPointerException e){
+            stateText.setFill(Color.RED);
+            stateText.setText("Parse error");
+        }
+    }
+
+    @FXML
+    private void clickFindLessButton(){
+        String field = fieldChoiceBox.getValue();
+        String value = filteredValue.getText();
+        ObservableList<StudyGroupForUITable> filteredList = FXCollections.observableArrayList();
+        if(value.isEmpty()) {
+            tableView.setItems(studyGroups);
+            return;
+        }
+        try {
+            switch (field) {
+                case "Id":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId()<Long.parseLong(value));
+                    break;
+                case "Name":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value)<0);
+                    break;
+                case "CreationDate":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value)<0);
+                    break;
+                case "StudentsCount":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount()<Long.parseLong(value));
+                    break;
+                case "FormOfEducation":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value)<0);
+                    break;
+                case "Semester":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester())<Semester.getNumberByEnglish(value));
+                    break;
+                case "AdminName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value)<0);
+                    break;
+                case "Height":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight()<Long.parseLong(value));
+                    break;
+                case "Weight":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight()<Long.parseLong(value));
+                    break;
+                case "PassportID":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value)<0);
+                    break;
+                case "LocationName":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value)<0);
+                    break;
+                case "Owner":
+                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value)<0);
+                    break;
+            }
+            tableView.setItems(filteredList);
+        } catch (NumberFormatException | NullPointerException e){
+            stateText.setFill(Color.RED);
+            stateText.setText("Parse error");
         }
     }
 

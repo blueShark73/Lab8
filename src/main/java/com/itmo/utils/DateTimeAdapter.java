@@ -1,6 +1,7 @@
 package com.itmo.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -18,5 +19,10 @@ public class DateTimeAdapter {
 
     public static String parseToString(ZonedDateTime zonedDateTime){
         return dateFormat.format(Date.from(zonedDateTime.toInstant()));
+    }
+
+    public static ZonedDateTime parseToZonedDateTime(String string) throws ParseException {
+        Date date = dateFormat.parse(string);
+        return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }
