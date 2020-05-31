@@ -6,6 +6,7 @@ import com.itmo.exceptions.InputFormatException;
 import com.itmo.exceptions.SameIdException;
 import com.itmo.server.Session;
 import com.itmo.server.notifications.AddServerNotification;
+import com.itmo.server.notifications.NotificationManager;
 import com.itmo.server.notifications.ServerNotification;
 import com.itmo.utils.DataBaseManager;
 import com.itmo.utils.FieldsValidator;
@@ -38,6 +39,7 @@ public class Application {
     private ZonedDateTime initializationDate;
     private ConcurrentHashMap<User, Session> activeSessions = new ConcurrentHashMap<>();
     private DataBaseManager dataBaseManager;
+    private NotificationManager notificationManager;
 
 
     /**

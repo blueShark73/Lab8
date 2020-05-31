@@ -7,6 +7,7 @@ import com.itmo.exceptions.IdNotFoundException;
 import com.itmo.exceptions.InputFormatException;
 import lombok.NonNull;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -35,6 +36,11 @@ public class RemoveCommand extends Command implements CommandWithInit {
             }
             application.getCollection().removeIf(studyGroup -> studyGroup.getId() == id);
             application.getIdList().removeIf(listId -> listId.equals(id));
+            try {
+                application.getNotificationManager().removeElementNotification(id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } catch (IdNotFoundException e) {
             return e.getMessage();
         }

@@ -80,7 +80,7 @@ public class FieldsValidator {
                 checkNumber((long)group.getAdminName().length(), 2, 19, "", false) &&
                 checkNumber(group.getHeight(), 0, 300, "", false) &&
                 checkNumber(group.getWeight(), 0, 300, "", false) &&
-                checkNumber((long)group.getPassportID().length(), 6, 24, "", false) &&
+                checkNumber((long)group.getPassportID().length(), 7, 24, "", false) &&
                 (group.getLocationName()==null || group.getLocationName().length()<20);
     }
 }

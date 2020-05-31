@@ -29,11 +29,12 @@ public class HandlerThread extends Thread {
     public void run() {
         try {
             Command command = new SerializationManager<Command>().readObject(data);
-            log.info("Server receive command " + command.toString());
+            log.info("Server receive command " + command.toString() + " address: " + socketAddress);
             Session session = application.getSession(command.getUser());
-            if(command instanceof AddListenerCommand) {
+            if (command instanceof AddListenerCommand) {
                 ((AddListenerCommand) command).setSocketAddress(socketAddress);
                 application.sendCollectionToClient(datagramChannel, socketAddress);
+                command.execute(application, session);
                 return;
             }
             String result;

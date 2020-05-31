@@ -1,6 +1,7 @@
 package com.itmo.server;
 
 import com.itmo.app.Application;
+import com.itmo.server.notifications.NotificationManager;
 import com.itmo.utils.HandlerThread;
 
 import java.io.*;
@@ -15,11 +16,13 @@ import java.util.concurrent.*;
  */
 public class Server {
     private DatagramChannel channel;
+    private Application application;
     private byte[] buffer;
     private static final int DEFAULT_BUFFER_SIZE = 65536;
     private static final int READ_POOL_SIZE = 2;
 
-    public Server() {
+    public Server(Application application) {
+        this.application = application;
         buffer = new byte[DEFAULT_BUFFER_SIZE];
     }
 
@@ -29,6 +32,7 @@ public class Server {
         channel = DatagramChannel.open();
         channel.configureBlocking(false);
         channel.bind(address);
+        application.setNotificationManager(new NotificationManager(application.getActiveSessions(), channel));
         Runtime.getRuntime().addShutdownHook(new Thread(() -> System.out.println("Сервер закончил работу...")));
     }
 

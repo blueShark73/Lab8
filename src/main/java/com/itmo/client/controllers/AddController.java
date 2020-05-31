@@ -4,6 +4,7 @@ import com.itmo.app.*;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.client.User;
+import com.itmo.server.Response;
 import com.itmo.utils.FieldsValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,7 +16,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import lombok.Getter;
+import com.itmo.commands.*;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
@@ -89,9 +92,23 @@ public class AddController implements Initializable {
             stateText.setFill(Color.RED);
             return;
         }
-        if(FieldsValidator.complexCheckFields(new StudyGroupForUITable(group))) {
-            UIMain.mainController.getAddStage().close();
-            UIMain.mainController.getNameTextField().setText("");
+        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
+        if(FieldsValidator.complexCheckFields(studyGroupForUITable)) {
+            AddCommand command = new AddCommand();
+            if(UIMain.mainController.isMaxButton()) command = new AddIfMaxCommand();
+            else if (UIMain.mainController.isMinButton()) command = new AddIfMinCommand();
+            command.setStudyGroup(group);
+            try {
+                if(UIMain.client.sendCommandAndReceiveAnswer(command).isSuccessfullyExecute()) {
+                    UIMain.mainController.getAddStage().close();
+                    UIMain.mainController.getNameTextField().setText("");
+                    return;
+                }
+                stateText.setText("Element is not added");
+                stateText.setFill(Color.YELLOW);
+            } catch (IOException | ClassNotFoundException e){
+                e.printStackTrace();
+            }
         }
         else {
             stateText.setText("Out of range");

@@ -4,6 +4,8 @@ import com.itmo.app.Application;
 import com.itmo.server.Session;
 import lombok.NonNull;
 
+import java.io.IOException;
+
 /**
  * команда очищает коллекцию от элементов, принадлежащих текущему пользователю
  */
@@ -15,6 +17,11 @@ public class ClearCommand extends Command {
             if (studyGroup.getOwner().equals(session.getUser())) {
                 application.getIdList().remove(studyGroup.getId());
                 application.getCollection().remove(studyGroup);
+                try {
+                    application.getNotificationManager().removeElementNotification(studyGroup.getId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         successfullyExecute = true;

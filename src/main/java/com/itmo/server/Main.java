@@ -18,7 +18,7 @@ public class Main {
         try {
             Application application = new Application();
             System.out.println("Серверное приложение запущено...");
-            Server server = new Server();
+            Server server = new Server(application);
             server.connect(UIMain.PORT);
             log.info("Connection is established, listen port: " + UIMain.PORT);
             server.run(application);

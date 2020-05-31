@@ -1,5 +1,6 @@
 package com.itmo.utils;
 
+import com.itmo.client.UIMain;
 import com.itmo.client.controllers.MainController;
 import com.itmo.commands.AddListenerCommand;
 import com.itmo.commands.Command;
@@ -28,6 +29,7 @@ public class Listener extends Thread {
             SerializationManager<ServerNotification> serializationManager = new SerializationManager<>();
             datagramSocket.connect(socketAddress);
             Command command = new AddListenerCommand();
+            command.setUser(UIMain.client.getUser());
             byte[] data = new SerializationManager<Command>().writeObject(command);
             DatagramPacket packet = new DatagramPacket(data, data.length, socketAddress);
             datagramSocket.send(packet);

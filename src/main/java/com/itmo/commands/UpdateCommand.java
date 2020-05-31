@@ -2,6 +2,7 @@ package com.itmo.commands;
 
 import com.itmo.app.Application;
 import com.itmo.app.builder.StudyGroupCheckBuilder;
+import com.itmo.client.StudyGroupForUITable;
 import com.itmo.server.Session;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.app.StudyGroup;
@@ -9,6 +10,7 @@ import com.itmo.exceptions.IdNotFoundException;
 import com.itmo.exceptions.InputFormatException;
 import lombok.NonNull;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -51,6 +53,12 @@ public class UpdateCommand extends Command implements CommandWithInit {
                 if (application.getCollection().stream().noneMatch(studyGroup1 -> studyGroup1.getId() == this.studyGroup.getId()))
                     throw new IdNotFoundException("Элемент нельзя обновить, т.к. элемента с таким id нет в коллекции");
                 throw new IdNotFoundException("Элемент нельзя обновить, т.к. он не принадлежит вам");
+            }
+            try {
+                application.getNotificationManager().removeElementNotification(studyGroup.getId());
+                application.getNotificationManager().addElementNotification(new StudyGroupForUITable(studyGroup));
+            } catch (IOException e){
+                e.printStackTrace();
             }
             application.getCollection().add(studyGroup);
             successfullyExecute = true;

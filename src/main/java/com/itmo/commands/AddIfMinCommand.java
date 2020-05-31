@@ -1,8 +1,11 @@
 package com.itmo.commands;
 
 import com.itmo.app.Application;
+import com.itmo.client.StudyGroupForUITable;
 import com.itmo.server.Session;
 import lombok.NonNull;
+
+import java.io.IOException;
 
 /**
  * команда добавляет элемент, если он меньше минимального элемента коллекции
@@ -14,6 +17,7 @@ public class AddIfMinCommand extends AddCommand {
         if ((application.getMinStudyGroup()==null || studyGroup.compareTo(application.getMinStudyGroup()) < 0) && application.getDataBaseManager().addGroup(studyGroup)) {
             application.getCollection().add(studyGroup);
             application.getIdList().add(studyGroup.getId());
+            notifyAboutAdding(application.getNotificationManager());
             successfullyExecute = true;
             return "Элемент с именем "+studyGroup.getName()+" добавлен";
         }
