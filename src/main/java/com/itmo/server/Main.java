@@ -1,6 +1,7 @@
 package com.itmo.server;
 
 import com.itmo.app.Application;
+import com.itmo.client.UIMain;
 import com.itmo.exceptions.WithoutArgumentException;
 
 import java.io.IOException;
@@ -15,13 +16,11 @@ public class Main {
 
     public static void main(String[] args) throws Exception{
         try {
-            if (args.length == 0) throw new WithoutArgumentException();
-            int port = Integer.parseInt(args[0]);
             Application application = new Application();
             System.out.println("Серверное приложение запущено...");
             Server server = new Server();
-            server.connect(port);
-            log.info("Connection is established, listen port: " + port);
+            server.connect(UIMain.PORT);
+            log.info("Connection is established, listen port: " + UIMain.PORT);
             server.run(application);
         } catch (WithoutArgumentException e) {
             System.out.println("Для запуска введите порт в виде аргумента командной строки!!!");

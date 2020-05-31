@@ -21,7 +21,7 @@ public class Listener extends Thread {
     private static final int SIZE = 65536;
 
     @Override
-    public void run(){
+    public void run() {
         try {
             SocketAddress socketAddress = new InetSocketAddress(host, port);
             DatagramSocket datagramSocket = new DatagramSocket();
@@ -31,21 +31,16 @@ public class Listener extends Thread {
             byte[] data = new SerializationManager<Command>().writeObject(command);
             DatagramPacket packet = new DatagramPacket(data, data.length, socketAddress);
             datagramSocket.send(packet);
-            data = new byte[SIZE];
-            packet = new DatagramPacket(data, data.length);
-            datagramSocket.receive(packet);
-            Response response = new SerializationManager<Response>().readObject(packet.getData());
-            if(response.isSuccessfullyExecute()) {
-                while (true) {
-                    data = new byte[SIZE];
-                    packet = new DatagramPacket(data, data.length);
-                    datagramSocket.receive(packet);
-                    ServerNotification notification = serializationManager.readObject(packet.getData());
-                    notification.updateData(mainController.getStudyGroups());
-                    //какой-то метод для перерисовки
-                }
+            while (true) {
+                data = new byte[SIZE];
+                packet = new DatagramPacket(data, data.length);
+                datagramSocket.receive(packet);
+                ServerNotification notification = serializationManager.readObject(packet.getData());
+                notification.updateData(mainController.getStudyGroups());
+                mainController.redraw();
             }
-        } catch (IOException | ClassNotFoundException e){
+
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

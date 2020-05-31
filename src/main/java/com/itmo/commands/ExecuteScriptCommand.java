@@ -19,10 +19,10 @@ public class ExecuteScriptCommand extends Command implements CommandWithInit {
         try {
             File file = new File(argument);
             Scanner fileScanner = new Scanner(file);
-            Client client = Main.getActiveClient();
-            client.incrementScriptCounter();
-            client.getHandler().run(fileScanner);
-            client.decrementScriptCounter();
+            //Client client = Main.getActiveClient();
+            //client.incrementScriptCounter();
+            //client.getHandler().run(fileScanner);
+            //client.decrementScriptCounter();
             status = "Скрипт " + argument + " закончил исполнение";
             return;
         } catch (FileNotFoundException e) {

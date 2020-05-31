@@ -80,7 +80,7 @@ public class Handler {
      */
     public void run(Scanner scanner) {
         try {
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> client.sendCommandAndReceiveAnswer(new ExitCommand())));
+            //Runtime.getRuntime().addShutdownHook(new Thread(() -> client.sendCommandAndReceiveAnswer(new ExitCommand())));
             while (!exitCommand && scanner.hasNext()) {
                 try {
                     //ищем в следующей строке команду, вдруг она не в начале строки
@@ -105,7 +105,7 @@ public class Handler {
                     }
                     if(exitCommand) return;
                     if (command instanceof ExitCommand) setExitCommand();
-                    client.sendCommandAndReceiveAnswer(command);
+                    //client.sendCommandAndReceiveAnswer(command);
                 } catch (InputFormatException | StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException e) {
                     System.out.println("Ошибка ввода!!! Такой команды нет.");
                     scanner.reset();//иначе при вводе большого кол-ва пустых строк будет выведено много предупреждений
@@ -116,7 +116,7 @@ public class Handler {
                 }
             }
         } catch (NoSuchElementException e){
-            client.sendCommandAndReceiveAnswer(new ExitCommand());
+            //client.sendCommandAndReceiveAnswer(new ExitCommand());
         }
     }
 

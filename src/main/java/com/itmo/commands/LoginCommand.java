@@ -5,6 +5,7 @@ import com.itmo.app.CommandHistory;
 import com.itmo.client.User;
 import com.itmo.server.Session;
 import com.itmo.utils.FieldsValidator;
+import javafx.scene.paint.Color;
 import lombok.Setter;
 
 import java.io.Console;
@@ -22,7 +23,8 @@ public class LoginCommand extends Command implements CommandWithInit {
     public String execute(Application application, Session session) {
         if (application.getDataBaseManager().containsUser(userForLogin)) {
             Session sessionActual = new Session(userForLogin, new CommandHistory(CommandHistory.DEFAULT_HISTORY_SIZE));
-            userForLogin.setColor(application.getDataBaseManager().getUserColor(userForLogin));
+            Color userColor = application.getDataBaseManager().getUserColor(userForLogin);
+            userForLogin.setColor(userColor.getRed(), userColor.getGreen(), userColor.getBlue());
             if(!application.addSession(userForLogin, sessionActual)) return "Пользователь с ником " + userForLogin.getName() + " уже авторизован.\nАвторизация с двух устройств запрещена!";
             user = userForLogin;
             successfullyExecute = true;

@@ -17,8 +17,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class DataBaseManager {
     //For Database
-    private static final String DB_URL = "jdbc:postgresql://pg:5432/studs";
-    //private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
+    //private static final String DB_URL = "jdbc:postgresql://pg:5432/studs";
+    private static final String DB_URL = "jdbc:postgresql://localhost:5432/postgres";
     private static String USER;
     private static String PASS;
     private static final String FILE_WITH_ACCOUNT = "account";
@@ -83,6 +83,9 @@ public class DataBaseManager {
                     resultSet.getString("passport_id"),
                     new Location(resultSet.getDouble("x_admin"), resultSet.getLong("y_admin"), resultSet.getString("location_name"))
             );
+            User user = new User(resultSet.getString("owner"));
+            Color userColor = getUserColor(user);
+            user.setColor(userColor.getRed(), userColor.getGreen(), userColor.getBlue());
             StudyGroup studyGroup = new StudyGroup(
                     resultSet.getLong("id"),
                     resultSet.getString("name"),
@@ -92,7 +95,7 @@ public class DataBaseManager {
                     FormOfEducation.valueOf(resultSet.getString("form_of_education")),
                     Semester.valueOf(resultSet.getString("semester")),
                     person,
-                    resultSet.getString("owner"),
+                    user,
                     new Scanner(System.in)
             );
             collection.add(studyGroup);
@@ -123,7 +126,7 @@ public class DataBaseManager {
             statement.setDouble(13, location.getX());
             statement.setLong(14, location.getY());
             statement.setString(15, location.getName());
-            statement.setString(16, studyGroup.getOwner());
+            statement.setString(16, studyGroup.getOwner().getName());
             studyGroup.setId(id);
             statement.execute();
             return true;

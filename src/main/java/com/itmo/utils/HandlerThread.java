@@ -34,6 +34,7 @@ public class HandlerThread extends Thread {
             if(command instanceof AddListenerCommand) {
                 ((AddListenerCommand) command).setSocketAddress(socketAddress);
                 application.sendCollectionToClient(datagramChannel, socketAddress);
+                return;
             }
             String result;
             try {

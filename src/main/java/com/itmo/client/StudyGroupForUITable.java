@@ -31,7 +31,9 @@ public class StudyGroupForUITable implements Serializable {
     private Long locationY;
     private String locationName;
     private String owner;
-    private Color color;
+    private double red;
+    private double green;
+    private double blue;
 
     public StudyGroupForUITable(StudyGroup studyGroup){
         Person person = studyGroup.getGroupAdmin();
@@ -52,6 +54,9 @@ public class StudyGroupForUITable implements Serializable {
         locationY = location.getY();
         locationName = location.getName();
         owner = studyGroup.getOwner().getName();
-        color = studyGroup.getOwner().getColor();
+        Color color = studyGroup.getOwner().getColor();
+        red = color.getRed();
+        green = color.getGreen();
+        blue = color.getBlue();
     }
 }

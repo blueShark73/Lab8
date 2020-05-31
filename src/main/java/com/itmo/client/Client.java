@@ -61,7 +61,6 @@ public class Client {
             socket.receive(packet);
             Response response = responseSerializationManager.readObject(answerInBytes);
             if (user == null) {
-                if (response.getUser() != null) handler.setDefaultPack();
                 user = response.getUser();
             }
             return response;

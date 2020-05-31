@@ -1,11 +1,7 @@
 package com.itmo.client.controllers;
 
-import com.itmo.app.*;
-import com.itmo.client.Client;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
-import com.itmo.client.User;
-import com.itmo.server.Server;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.utils.Listener;
 import javafx.collections.FXCollections;
@@ -163,7 +159,7 @@ public class MainController implements Initializable {
         Color userColor = UIMain.client.getUser().getColor();
         userColorRectangle.setFill(userColor);
 
-        currentUserLabel.setText(currentUserLabel.getText() + UIMain.USERNAME);
+        currentUserLabel.setText(currentUserLabel.getText() + UIMain.client.getUser().getName());
 
         UIMain.drawAxis(canvas);
         for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
@@ -178,7 +174,8 @@ public class MainController implements Initializable {
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         UIMain.drawAxis(canvas);
         for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
-            UIMain.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), getRandomColor(), canvas);
+            Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
+            UIMain.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color, canvas);
         }
     }
 

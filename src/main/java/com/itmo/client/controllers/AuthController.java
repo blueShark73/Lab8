@@ -81,8 +81,7 @@ public class AuthController implements Initializable {
                     pass = generator.generate(6, 19);
                 }
                 RegisterCommand command = new RegisterCommand();
-                Color userColor = Color.color(Math.random(), Math.random(), Math.random());
-                command.setUserForRegistration(new User(userName, pass, userColor));
+                command.setUserForRegistration(new User(userName, pass, Math.random(), Math.random(), Math.random()));
                 try {
                     sendAndHandler(currentStage, mainController, command);
                 } catch (IOException | ClassNotFoundException e) {
