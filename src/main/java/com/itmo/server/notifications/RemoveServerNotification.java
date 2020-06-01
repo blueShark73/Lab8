@@ -12,6 +12,8 @@ public class RemoveServerNotification implements ServerNotification, Serializabl
 
     @Override
     public void updateData(ObservableList<StudyGroupForUITable> list) {
-        list.removeIf(e -> e.getId().equals(id));
+        try {
+            list.removeIf(e -> e.getId().equals(id));
+        } catch (IllegalStateException ignored){}
     }
 }

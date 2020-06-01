@@ -5,6 +5,7 @@ import com.itmo.commands.UpdateCommand;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.client.User;
+import com.itmo.utils.DateTimeAdapter;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,6 +19,7 @@ import com.itmo.utils.FieldsValidator;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
@@ -85,10 +87,10 @@ public class UpdateController implements Initializable {
             Person person = new Person(adminNameField.getText(), Long.parseLong(heightField.getText()), Long.parseLong(weightField.getText()),
                     passportIdField.getText(), new Location(Double.parseDouble(locationXField.getText()), Long.parseLong(locationYField.getText()), locationNameField.getText()));
             group.setGroupAdmin(person);
-            group.setCreationDate(ZonedDateTime.now());
+            group.setCreationDate(DateTimeAdapter.parseToZonedDateTime(selectedStudyGroup.getCreationDate()));
             group.setId(Long.parseLong(idLabel.getText()));
             group.setOwner(new User(selectedStudyGroup.getOwner()));
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException | ParseException e) {
             stateText.setText("Parsing error, check values");
             stateText.setFill(Color.RED);
             return;
@@ -101,7 +103,7 @@ public class UpdateController implements Initializable {
                 if (UIMain.client.sendCommandAndReceiveAnswer(command).isSuccessfullyExecute()) {
                     UIMain.mainController.getUpdateStage().close();
                     UIMain.mainController.getStateText().setFill(Color.GREEN);
-                    UIMain.mainController.getStateText().setText("Element was updated");
+                    UIMain.mainController.getStateText().setText("Element updated");
                     return;
                 }
                 stateText.setText("Element is not updated");

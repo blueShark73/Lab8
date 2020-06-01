@@ -38,7 +38,9 @@ public class Listener extends Thread {
                 packet = new DatagramPacket(data, data.length);
                 datagramSocket.receive(packet);
                 ServerNotification notification = serializationManager.readObject(packet.getData());
-                notification.updateData(mainController.getStudyGroups());
+                try {
+                    notification.updateData(mainController.getStudyGroups());
+                } catch (IllegalStateException ignored){}
                 mainController.redraw();
             }
 

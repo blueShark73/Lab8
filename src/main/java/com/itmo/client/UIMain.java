@@ -213,7 +213,15 @@ public class UIMain extends Application {
         authStage.setScene(new Scene(auth));
         authStage.show();
 
+        Thread.setDefaultUncaughtExceptionHandler(UIMain::exceptionHandler);
         authController.setHandlers(authStage, mainController);
+    }
+
+    private static void exceptionHandler(Thread thread, Throwable throwable){
+        if(throwable instanceof NumberFormatException) {
+            mainController.getStateText().setFill(Color.RED);
+            mainController.getStateText().setText("Parse error");
+        }
     }
 
     public static void main(String[] args) {
