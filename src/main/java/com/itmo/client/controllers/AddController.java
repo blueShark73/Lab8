@@ -102,6 +102,8 @@ public class AddController implements Initializable {
                 if(UIMain.client.sendCommandAndReceiveAnswer(command).isSuccessfullyExecute()) {
                     UIMain.mainController.getAddStage().close();
                     UIMain.mainController.getNameTextField().setText("");
+                    UIMain.mainController.getStateText().setFill(Color.GREEN);
+                    UIMain.mainController.getStateText().setText("Element was added");
                     return;
                 }
                 stateText.setText("Element is not added");

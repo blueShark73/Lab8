@@ -9,6 +9,7 @@ import com.itmo.app.StudyGroup;
 import com.itmo.exceptions.IdNotFoundException;
 import com.itmo.exceptions.InputFormatException;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -16,6 +17,7 @@ import java.util.Scanner;
 /**
  * команда обновит значения всех полей элемента с данным id
  */
+@Setter
 public class UpdateCommand extends Command implements CommandWithInit {
     private StudyGroup studyGroup;
 
@@ -49,7 +51,7 @@ public class UpdateCommand extends Command implements CommandWithInit {
     public String execute(Application application, @NonNull Session session) {
         studyGroup.setOwner(session.getUser());
         try {
-            if (!application.getCollection().removeIf(studyGroup -> studyGroup.getId() == this.studyGroup.getId()) && studyGroup.getOwner().equals(session.getUser()) || !(application.getDataBaseManager().update(studyGroup.getId(), studyGroup) > 0)) {
+            if (!application.getCollection().removeIf(studyGroup -> studyGroup.getId() == this.studyGroup.getId()) && studyGroup.getOwner().getName().equals(session.getUser().getName()) || !(application.getDataBaseManager().update(studyGroup.getId(), studyGroup) > 0)) {
                 if (application.getCollection().stream().noneMatch(studyGroup1 -> studyGroup1.getId() == this.studyGroup.getId()))
                     throw new IdNotFoundException("Элемент нельзя обновить, т.к. элемента с таким id нет в коллекции");
                 throw new IdNotFoundException("Элемент нельзя обновить, т.к. он не принадлежит вам");

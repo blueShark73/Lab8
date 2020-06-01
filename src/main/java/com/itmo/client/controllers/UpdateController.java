@@ -1,7 +1,10 @@
 package com.itmo.client.controllers;
 
+import com.itmo.app.*;
+import com.itmo.commands.UpdateCommand;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
+import com.itmo.client.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,13 +12,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import com.itmo.app.Semester;
-import com.itmo.app.FormOfEducation;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import com.itmo.utils.FieldsValidator;
 
+import java.io.IOException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
 public class UpdateController implements Initializable {
@@ -67,34 +70,46 @@ public class UpdateController implements Initializable {
     @FXML
     private Text stateText;
 
-    private StudyGroupForUITable group;
+    private StudyGroup group = new StudyGroup();
+
+    private StudyGroupForUITable selectedStudyGroup;
 
     @FXML
-    private void click(ActionEvent event){
+    private void click(ActionEvent event) {
         try {
             group.setName(nameField.getText());
-            group.setX(Long.parseLong(xField.getText()));
-            group.setY(Long.parseLong(yField.getText()));
+            group.setCoordinates(new Coordinates(Long.parseLong(xField.getText()), Long.parseLong(yField.getText())));
             group.setStudentsCount(Long.parseLong(studentsCountField.getText()));
-            group.setFormOfEducation(formChoiceBox.getValue());
-            group.setSemester(semesterChoiceBox.getValue());
-            group.setAdminName(group.getAdminName());
-            group.setHeight(Long.parseLong(heightField.getText()));
-            group.setWeight(Long.parseLong(weightField.getText()));
-            group.setPassportID(passportIdField.getText());
-            group.setLocationX(Double.parseDouble(locationXField.getText()));
-            group.setLocationY(Long.parseLong(locationYField.getText()));
-            group.setLocationName(locationNameField.getText());
-        } catch (NumberFormatException e){
+            group.setFormOfEducation(FormOfEducation.getValueByEnglish(formChoiceBox.getValue()));
+            group.setSemesterEnum(Semester.getValueByEnglish(semesterChoiceBox.getValue()));
+            Person person = new Person(adminNameField.getText(), Long.parseLong(heightField.getText()), Long.parseLong(weightField.getText()),
+                    passportIdField.getText(), new Location(Double.parseDouble(locationXField.getText()), Long.parseLong(locationYField.getText()), locationNameField.getText()));
+            group.setGroupAdmin(person);
+            group.setCreationDate(ZonedDateTime.now());
+            group.setId(Long.parseLong(idLabel.getText()));
+            group.setOwner(new User(selectedStudyGroup.getOwner()));
+        } catch (NumberFormatException e) {
             stateText.setText("Parsing error, check values");
             stateText.setFill(Color.RED);
             return;
         }
-        if (FieldsValidator.complexCheckFields(group)) {
-            UIMain.mainController.getUpdateStage().close();
-            UIMain.mainController.getStudyGroups().add(group);
-        }
-        else {
+        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
+        if (FieldsValidator.complexCheckFields(studyGroupForUITable)) {
+            UpdateCommand command = new UpdateCommand();
+            command.setStudyGroup(group);
+            try {
+                if (UIMain.client.sendCommandAndReceiveAnswer(command).isSuccessfullyExecute()) {
+                    UIMain.mainController.getUpdateStage().close();
+                    UIMain.mainController.getStateText().setFill(Color.GREEN);
+                    UIMain.mainController.getStateText().setText("Element was updated");
+                    return;
+                }
+                stateText.setText("Element is not updated");
+                stateText.setFill(Color.YELLOW);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
             stateText.setText("Out of range");
             stateText.setFill(Color.RED);
         }
@@ -106,20 +121,20 @@ public class UpdateController implements Initializable {
 
         semesterChoiceBox.setItems(Semester.getItems());
 
-        group = UIMain.mainController.getSelectedStudyGroupForUITable();
-        idLabel.setText(group.getId().toString());
-        nameField.setText(group.getName());
-        xField.setText(group.getX().toString());
-        yField.setText(group.getY().toString());
-        studentsCountField.setText(group.getStudentsCount().toString());
-        formChoiceBox.setValue(group.getFormOfEducation());
-        semesterChoiceBox.setValue(group.getSemester());
-        adminNameField.setText(group.getAdminName());
-        heightField.setText(group.getHeight().toString());
-        weightField.setText(group.getWeight().toString());
-        passportIdField.setText(group.getPassportID());
-        locationNameField.setText(group.getLocationName());
-        locationXField.setText(group.getLocationX().toString());
-        locationYField.setText(group.getLocationY().toString());
+        selectedStudyGroup = UIMain.mainController.getSelectedStudyGroupForUITable();
+        idLabel.setText(selectedStudyGroup.getId().toString());
+        nameField.setText(selectedStudyGroup.getName());
+        xField.setText(selectedStudyGroup.getX().toString());
+        yField.setText(selectedStudyGroup.getY().toString());
+        studentsCountField.setText(selectedStudyGroup.getStudentsCount().toString());
+        formChoiceBox.setValue(selectedStudyGroup.getFormOfEducation());
+        semesterChoiceBox.setValue(selectedStudyGroup.getSemester());
+        adminNameField.setText(selectedStudyGroup.getAdminName());
+        heightField.setText(selectedStudyGroup.getHeight().toString());
+        weightField.setText(selectedStudyGroup.getWeight().toString());
+        passportIdField.setText(selectedStudyGroup.getPassportID());
+        locationNameField.setText(selectedStudyGroup.getLocationName());
+        locationXField.setText(selectedStudyGroup.getLocationX().toString());
+        locationYField.setText(selectedStudyGroup.getLocationY().toString());
     }
 }

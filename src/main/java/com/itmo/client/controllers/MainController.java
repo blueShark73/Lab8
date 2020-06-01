@@ -123,6 +123,7 @@ public class MainController implements Initializable {
     private TextField filteredValue;
 
     @FXML
+    @Getter
     private Text stateText;
 
     @FXML
@@ -368,15 +369,19 @@ public class MainController implements Initializable {
     private void clickUpdateButton(ActionEvent event){
         int index = tableView.getSelectionModel().getFocusedIndex();
         selectedStudyGroupForUITable = studyGroups.get(index);
-        studyGroups.remove(index);
-        try {
-            Parent updateWindow = FXMLLoader.load(getClass().getResource("/views/update.fxml"));
-            updateStage = new Stage();
-            updateStage.setScene(new Scene(updateWindow));
-            updateStage.show();
-        } catch (IOException e){
-            e.printStackTrace();
+        if(selectedStudyGroupForUITable.getOwner().equals(UIMain.USERNAME)) {
+            try {
+                Parent updateWindow = FXMLLoader.load(getClass().getResource("/views/update.fxml"));
+                updateStage = new Stage();
+                updateStage.setScene(new Scene(updateWindow));
+                updateStage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
         }
+        stateText.setFill(Color.RED);
+        stateText.setText("Permission denied");
     }
 
     @FXML
