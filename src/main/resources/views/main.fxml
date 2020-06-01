@@ -31,18 +31,18 @@
                 <Label prefHeight="18.0" prefWidth="83.0" text="Your color:" />
                 <Rectangle fx:id="userColorRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f7f9fa" height="23.0" stroke="BLACK" strokeType="INSIDE" width="24.0" />
                 <Label fx:id="currentUserLabel" prefHeight="30.0" prefWidth="173.0" text="Current user: " />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="Exit" />
+                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="Exit" onAction="#clickExitButton"/>
             </children>
         </HBox>
         <HBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="34.0" prefHeight="34.0" prefWidth="1104.0" spacing="15.0">
             <children>
             <Button fx:id="executeButton" mnemonicParsing="false" text="Execute script" />
             <Button fx:id="sumButton" mnemonicParsing="false" text="Sum of studetsCount" />
-                <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" />
+                <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" onAction="#clickClearButton"/>
                 <Button fx:id="helpButton" mnemonicParsing="false" text="Help me" />
                 <Button fx:id="historyButton" mnemonicParsing="false" text="History" />
                 <Button fx:id="infoButton" mnemonicParsing="false" text="Information about collection" />
-                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemove" text="Remove element" />
+                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemoveButton" text="Remove element" />
                 <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickUpdateButton" text="Update fields" />
             </children>
         </HBox>

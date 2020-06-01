@@ -227,7 +227,7 @@ public class DataBaseManager {
     //удаляем все элементы, принадлежащие пользователю
     public boolean removeAll(String userName) {
         try {
-            PreparedStatement statement = connection.prepareStatement("select from " + TABLE_NAME + " where owner=?");
+            PreparedStatement statement = connection.prepareStatement("delete from " + TABLE_NAME + " where owner=?");
             statement.setString(1, userName);
             statement.execute();
             return true;

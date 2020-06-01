@@ -3,6 +3,9 @@ package com.itmo.client.controllers;
 import com.itmo.app.Semester;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
+import com.itmo.commands.ClearCommand;
+import com.itmo.commands.ExitCommand;
+import com.itmo.commands.RemoveCommand;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.utils.Listener;
 import javafx.collections.FXCollections;
@@ -197,6 +200,54 @@ public class MainController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void clickClearButton(){
+        try{
+            UIMain.client.sendCommandAndReceiveAnswer(new ClearCommand());
+            stateText.setFill(Color.GREEN);
+            stateText.setText("All your elements removed");
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+            stateText.setFill(Color.YELLOW);
+            stateText.setText("Problems on server");
+        }
+
+    }
+
+    @FXML
+    private void clickRemoveButton(){
+        int index = tableView.getSelectionModel().getFocusedIndex();
+        StudyGroupForUITable studyGroupForUITable = studyGroups.get(index);
+        Long id = studyGroupForUITable.getId();
+        if(!studyGroupForUITable.getOwner().equals(UIMain.USERNAME)){
+            stateText.setFill(Color.RED);
+            stateText.setText("Permission denied");
+            return;
+        }
+        RemoveCommand command = new RemoveCommand();
+        command.setId(id);
+        try{
+            if(UIMain.client.sendCommandAndReceiveAnswer(command).isSuccessfullyExecute()){
+                stateText.setFill(Color.GREEN);
+                stateText.setText("Element successfully removed");
+            }
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+            stateText.setFill(Color.YELLOW);
+            stateText.setText("Problems on server");
+        }
+    }
+
+    @FXML
+    private void clickExitButton(){
+        try {
+            UIMain.client.sendCommandAndReceiveAnswer(new ExitCommand());
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     @FXML
@@ -402,14 +453,6 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void clickRemove(ActionEvent event) {
-        int index = tableView.getSelectionModel().getFocusedIndex();
-        studyGroups.remove(index);
-        stateText.setText("Element was successfully removed");
-        stateText.setFill(Color.GREEN);
-    }
-
-    @FXML
     private void clickCanvas(MouseEvent event) {
         int eventX = (int) event.getX();
         int eventY = (int) event.getY();
@@ -427,7 +470,7 @@ public class MainController implements Initializable {
             int row = tableView.getItems().indexOf(nearerStudyGroup);
             tableView.getSelectionModel().select(row);
             if (row != -1) {
-                stateText.setText("Element was successfully found in table");
+                stateText.setText("Element successfully found in table");
                 stateText.setFill(Color.GREEN);
                 return;
             }

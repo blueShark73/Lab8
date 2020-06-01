@@ -55,7 +55,6 @@ public class Client {
             byte[] commandInBytes = commandSerializationManager.writeObject(command);
             DatagramPacket packet = new DatagramPacket(commandInBytes, commandInBytes.length, socketAddress);
             socket.send(packet);
-            System.out.println("Запрос отправлен на сервер...");
             byte[] answerInBytes = new byte[DEFAULT_BUFFER_SIZE];
             packet = new DatagramPacket(answerInBytes, answerInBytes.length);
             socket.receive(packet);

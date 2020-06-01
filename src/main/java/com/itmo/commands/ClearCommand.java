@@ -14,7 +14,7 @@ public class ClearCommand extends Command {
     public String execute(Application application, @NonNull Session session) {
         application.getDataBaseManager().removeAll(session.getUser().getName());
         application.getCollection().forEach(studyGroup -> {
-            if (studyGroup.getOwner().equals(session.getUser())) {
+            if (studyGroup.getOwner().getName().equals(session.getUser().getName())) {
                 application.getIdList().remove(studyGroup.getId());
                 application.getCollection().remove(studyGroup);
                 try {

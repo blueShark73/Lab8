@@ -6,6 +6,7 @@ import com.itmo.utils.FieldsValidator;
 import com.itmo.exceptions.IdNotFoundException;
 import com.itmo.exceptions.InputFormatException;
 import lombok.NonNull;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 /**
  * команда удаляет элемент из коллекции по его id
  */
+@Setter
 public class RemoveCommand extends Command implements CommandWithInit {
     private Long id;
 
@@ -29,7 +31,7 @@ public class RemoveCommand extends Command implements CommandWithInit {
     @Override
     public String execute(Application application, @NonNull Session session) {
         try {
-            if (application.getCollection().stream().noneMatch(studyGroup -> studyGroup.getOwner().equals(session.getUser()) && studyGroup.getId() == id) || !(application.getDataBaseManager().remove(id) > 0)) {
+            if (application.getCollection().stream().noneMatch(studyGroup -> studyGroup.getOwner().getName().equals(session.getUser().getName()) && studyGroup.getId() == id) || !(application.getDataBaseManager().remove(id) > 0)) {
                 if (application.getCollection().stream().noneMatch(studyGroup -> studyGroup.getId() == id))
                     throw new IdNotFoundException("Элемент не удален, т.к. элемента с таким id нет в коллекции");
                 throw new IdNotFoundException("Элемент не удален, т.к. вы не являетесь владельцем этого элемента");

@@ -3,6 +3,7 @@ package com.itmo.utils;
 
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.exceptions.InputFormatException;
+import javafx.collections.ObservableList;
 
 /**
  * класс для валидации данных, вводимых пользвателем с консоли или же из файла
@@ -82,5 +83,10 @@ public class FieldsValidator {
                 checkNumber(group.getWeight(), 0, 300, "", false) &&
                 checkNumber((long)group.getPassportID().length(), 7, 24, "", false) &&
                 (group.getLocationName()==null || group.getLocationName().length()<20);
+    }
+
+    public
+    static boolean checkUniquenessCoordinate(StudyGroupForUITable studyGroupForUITable, ObservableList<StudyGroupForUITable> groups){
+        return groups.filtered(s -> s.getX().equals(studyGroupForUITable.getX()) && s.getY().equals(studyGroupForUITable.getY())).size()==0;
     }
 }

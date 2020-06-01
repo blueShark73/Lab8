@@ -93,7 +93,7 @@ public class AddController implements Initializable {
             return;
         }
         StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
-        if(FieldsValidator.complexCheckFields(studyGroupForUITable)) {
+        if(FieldsValidator.complexCheckFields(studyGroupForUITable) && FieldsValidator.checkUniquenessCoordinate(studyGroupForUITable, UIMain.mainController.getStudyGroups())) {
             AddCommand command = new AddCommand();
             if(UIMain.mainController.isMaxButton()) command = new AddIfMaxCommand();
             else if (UIMain.mainController.isMinButton()) command = new AddIfMinCommand();
