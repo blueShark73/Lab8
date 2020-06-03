@@ -40,7 +40,7 @@
             <Button fx:id="sumButton" mnemonicParsing="false" text="Sum of studetsCount" />
                 <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" onAction="#clickClearButton"/>
                 <Button fx:id="helpButton" mnemonicParsing="false" text="Help me" />
-                <Button fx:id="historyButton" mnemonicParsing="false" text="History" />
+                <Button fx:id="historyButton" mnemonicParsing="false" text="History" onAction="#clickHistoryButton"/>
                 <Button fx:id="infoButton" mnemonicParsing="false" text="Information about collection" />
                 <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemoveButton" text="Remove element" />
                 <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickUpdateButton" text="Update fields" />

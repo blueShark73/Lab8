@@ -4,14 +4,12 @@ import com.itmo.app.Semester;
 import com.itmo.app.StudyGroup;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
-import com.itmo.commands.UpdateCommand;
+import com.itmo.commands.*;
+import com.itmo.server.Response;
 import com.itmo.utils.StudyGroupAdapter;
+import com.sun.javafx.stage.StageHelper;
 import javafx.scene.control.cell.TextFieldTableCell;
 import com.itmo.app.FormOfEducation;
-import com.itmo.app.Semester;
-import com.itmo.commands.ClearCommand;
-import com.itmo.commands.ExitCommand;
-import com.itmo.commands.RemoveCommand;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.utils.Listener;
 import javafx.collections.FXCollections;
@@ -36,6 +34,7 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -161,6 +160,12 @@ public class MainController implements Initializable {
     private Stage addStage;
 
     @Getter
+    private Stage historyStage;
+
+    @Getter
+    private ObservableList<String> commandsForHistory;
+
+    @Getter
     private Stage updateStage;
 
     private Listener listener;
@@ -205,6 +210,24 @@ public class MainController implements Initializable {
             addStage.setScene(new Scene(addWindow));
             addStage.show();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clickHistoryButton(){
+        try {
+            Response response = UIMain.client.sendCommandAndReceiveAnswer(new HistoryCommand());
+            String[] commands = response.getAnswer().split("\n");
+            System.out.println(Arrays.toString(commands));
+            commandsForHistory = FXCollections.observableArrayList(commands);
+
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/history.fxml"));
+            historyStage = new Stage();
+            historyStage.setScene(new Scene(parent));
+            historyStage.setTitle("Command history");
+            historyStage.show();
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -672,7 +695,7 @@ public class MainController implements Initializable {
         locationNameColumn.setCellValueFactory(new PropertyValueFactory<>("locationName"));
         ownerColumn.setCellValueFactory(new PropertyValueFactory<>("owner"));
 
-        studyGroups = FXCollections.synchronizedObservableList(FXCollections.observableArrayList());
+        studyGroups = FXCollections.observableArrayList();
 
         tableView.setItems(studyGroups);
 

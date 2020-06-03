@@ -17,6 +17,10 @@ public class DateTimeAdapter {
         return date.toLocalDate().atStartOfDay(ZoneId.systemDefault());
     }
 
+    public static String parseToString(Date date){
+        return dateFormat.format(date);
+    }
+
     public static String parseToString(ZonedDateTime zonedDateTime){
         return dateFormat.format(Date.from(zonedDateTime.toInstant()));
     }
