@@ -7,7 +7,6 @@ import com.itmo.client.UIMain;
 import com.itmo.commands.*;
 import com.itmo.server.Response;
 import com.itmo.utils.StudyGroupAdapter;
-import com.sun.javafx.stage.StageHelper;
 import javafx.scene.control.cell.TextFieldTableCell;
 import com.itmo.app.FormOfEducation;
 import com.itmo.utils.FieldsValidator;
@@ -170,6 +169,12 @@ public class MainController implements Initializable {
 
     private Listener listener;
 
+    @Getter
+    private String info;
+
+    @Getter
+    private Stage infoStage;
+
     private Color getRandomColor() {
         return Color.color(Math.random(), Math.random(), Math.random());
     }
@@ -215,11 +220,36 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    private void clickSumButton(){
+        try {
+            Response response = UIMain.client.sendCommandAndReceiveAnswer(new SumOfStudentsCountCommand());
+            stateText.setText(response.getAnswer());
+            stateText.setFill(Color.GREEN);
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clickInfoButton(){
+        try {
+            info = UIMain.client.sendCommandAndReceiveAnswer(new InfoCommand()).getAnswer();
+
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/info.fxml"));
+            infoStage = new Stage();
+            infoStage.setScene(new Scene(parent));
+            infoStage.setTitle("Information about collection");
+            infoStage.show();
+        } catch (IOException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void clickHistoryButton(){
         try {
             Response response = UIMain.client.sendCommandAndReceiveAnswer(new HistoryCommand());
             String[] commands = response.getAnswer().split("\n");
-            System.out.println(Arrays.toString(commands));
             commandsForHistory = FXCollections.observableArrayList(commands);
 
             Parent parent = FXMLLoader.load(getClass().getResource("/views/history.fxml"));

@@ -10,11 +10,11 @@ public class InfoCommand extends Command {
     @Override
     public String execute(Application application, Session session) {
         StringBuilder result = new StringBuilder();
-        result.append("Информация о коллекции:").append("\n");
-        result.append("Дата загрузки коллекции в память: ").append(application.getInitializationDate()).append("\n");
-        result.append("Кол-во элементов: ").append(application.getCollection().size()).append("\n");
+        result.append("Information about collection:").append("\n");
+        result.append("Date of loading collection to memory: ").append(application.getInitializationDate()).append("\n");
+        result.append("Number of elements: ").append(application.getCollection().size()).append("\n");
         if (!application.getCollection().isEmpty()) {
-            result.append("Тип данных, хранимых в коллекции: ").append(application.getCollection().iterator().next().getClass()).append("\n");
+            result.append("Type of data, stored in the collection: ").append(application.getCollection().iterator().next().getClass()).append("\n");
         }
         successfullyExecute = true;
         return result.deleteCharAt(result.length() - 1).toString();
