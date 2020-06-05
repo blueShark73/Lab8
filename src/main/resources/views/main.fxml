@@ -36,7 +36,7 @@
         </HBox>
         <HBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="34.0" prefHeight="34.0" prefWidth="1104.0" spacing="15.0">
             <children>
-            <Button fx:id="executeButton" mnemonicParsing="false" text="Execute script" />
+            <Button fx:id="executeButton" mnemonicParsing="false" text="Execute script" onAction="#clickExecuteButton"/>
             <Button fx:id="sumButton" mnemonicParsing="false" text="Sum of studetsCount" onAction="#clickSumButton"/>
                 <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" onAction="#clickClearButton"/>
                 <Button fx:id="helpButton" mnemonicParsing="false" text="Help me" />

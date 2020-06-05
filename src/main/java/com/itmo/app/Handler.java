@@ -2,9 +2,11 @@ package com.itmo.app;
 
 
 import com.itmo.client.Client;
+import com.itmo.client.UIMain;
 import com.itmo.commands.*;
 import com.itmo.exceptions.InputFormatException;
 import com.itmo.exceptions.StackIsLimitedException;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,6 +19,8 @@ import java.util.Scanner;
 public class Handler {
     private HashMap<String, Command> commands;
     private boolean exitCommand = false;
+
+    @Setter
     private Client client;
 
     /**
@@ -105,7 +109,11 @@ public class Handler {
                     }
                     if(exitCommand) return;
                     if (command instanceof ExitCommand) setExitCommand();
-                    //client.sendCommandAndReceiveAnswer(command);
+                    try {
+                        client.sendCommandAndReceiveAnswer(command);
+                    } catch (IOException | ClassNotFoundException e){
+                        e.printStackTrace();
+                    }
                 } catch (InputFormatException | StringIndexOutOfBoundsException | ArrayIndexOutOfBoundsException e) {
                     System.out.println("Ошибка ввода!!! Такой команды нет.");
                     scanner.reset();//иначе при вводе большого кол-ва пустых строк будет выведено много предупреждений
@@ -115,16 +123,14 @@ public class Handler {
                     e.printStackTrace();
                 }
             }
+            if(exitCommand) UIMain.mainController.callExitFromScript();
         } catch (NoSuchElementException e){
-            //client.sendCommandAndReceiveAnswer(new ExitCommand());
+            try {
+                client.sendCommandAndReceiveAnswer(new ExitCommand());
+                UIMain.mainController.callExitFromScript();
+            } catch (IOException | ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
         }
-    }
-
-    /**
-     * обязательный метод для привязки приложения к обрабочику
-     *
-     */
-    public void setClient(Client client) {
-        this.client = client;
     }
 }

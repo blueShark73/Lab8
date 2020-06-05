@@ -6,6 +6,7 @@ import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.commands.*;
 import com.itmo.server.Response;
+import com.itmo.utils.Painter;
 import com.itmo.utils.StudyGroupAdapter;
 import javafx.scene.control.cell.TextFieldTableCell;
 import com.itmo.app.FormOfEducation;
@@ -33,7 +34,6 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -175,8 +175,17 @@ public class MainController implements Initializable {
     @Getter
     private Stage infoStage;
 
+    @Getter
+    private Stage executeStage;
+
+    private Painter painter;
+
     private Color getRandomColor() {
         return Color.color(Math.random(), Math.random(), Math.random());
+    }
+
+    public void callExitFromScript(){
+        System.exit(0);
     }
 
     public void setValues() {
@@ -185,9 +194,9 @@ public class MainController implements Initializable {
 
         currentUserLabel.setText(currentUserLabel.getText() + UIMain.client.getUser().getName());
 
-        UIMain.drawAxis(canvas);
+        painter.drawAxis();
         for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
-            UIMain.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), getRandomColor(), canvas);
+            painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), getRandomColor());
         }
 
         listener = new Listener(UIMain.PORT, UIMain.HOST, this);
@@ -196,10 +205,10 @@ public class MainController implements Initializable {
 
     public void redraw() {
         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        UIMain.drawAxis(canvas);
+        painter.drawAxis();
         for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
             Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
-            UIMain.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color, canvas);
+            painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color);
         }
     }
 
@@ -215,6 +224,19 @@ public class MainController implements Initializable {
             addStage.setScene(new Scene(addWindow));
             addStage.show();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clickExecuteButton(){
+        try{
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/execute.fxml"));
+            executeStage = new Stage();
+            executeStage.setScene(new Scene(parent));
+            executeStage.setTitle("Executing scripts");
+            executeStage.show();
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -511,8 +533,8 @@ public class MainController implements Initializable {
         int minDistance = UIMain.MIN_DISTANCE;
         StudyGroupForUITable nearerStudyGroup = null;
         for (StudyGroupForUITable studyGroup : studyGroups) {
-            int distance = UIMain.calculateDistance(UIMain.fromNormalXToCanvasX(studyGroup.getX().intValue(), canvas), eventX,
-                    UIMain.fromNormalYToCanvasY(studyGroup.getY().intValue(), canvas), eventY);
+            int distance = painter.calculateDistance(painter.fromNormalXToCanvasX(studyGroup.getX().intValue()), eventX,
+                    painter.fromNormalYToCanvasY(studyGroup.getY().intValue()), eventY);
             if (distance < minDistance) {
                 minDistance = distance;
                 nearerStudyGroup = studyGroup;
@@ -565,6 +587,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         UIMain.mainController = this;
+        painter = new Painter(canvas);
 
         tableView.setEditable(true);
 

@@ -2,6 +2,7 @@ package com.itmo.app.builder;
 
 import com.itmo.app.*;
 import com.itmo.app.builder.Builder;
+import com.itmo.client.UIMain;
 import com.itmo.utils.FieldsValidator;
 import lombok.NoArgsConstructor;
 
@@ -36,7 +37,7 @@ public class StudyGroupCheckBuilder implements Builder {
         do {
             System.out.println("Введите координату Y учебной группы: ");
             nextLine = studyGroup.getScanner().nextLine();
-        } while (!FieldsValidator.checkStringParseToLong(nextLine, "Ошибка ввода, координата - это целое число!!! Попробуйте снова."));
+        } while (!FieldsValidator.checkStringParseToLong(nextLine, "Ошибка ввода, координата - это целое число!!! Попробуйте снова.") || !FieldsValidator.checkUniquenessCoordinate(x, Long.parseLong(nextLine), UIMain.mainController.getStudyGroups()));
         long y = Long.parseLong(nextLine);
         studyGroup.setCoordinates(new Coordinates(x, y));
     }

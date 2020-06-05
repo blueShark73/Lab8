@@ -1,5 +1,6 @@
 package com.itmo.client;
 
+import com.itmo.app.Handler;
 import com.itmo.client.controllers.AuthController;
 import com.itmo.client.controllers.MainController;
 import com.itmo.server.Server;
@@ -203,6 +204,10 @@ public class UIMain extends Application {
 
         client = new Client();
         client.connect(HOST, PORT);
+        Handler handler = new Handler();
+        handler.setClient(client);
+        handler.setDefaultPack();
+        client.setHandler(handler);
 
         Parent root = FXMLLoader.load(getClass().getResource("/views/main.fxml"));
         stage.setScene(new Scene(root));
@@ -226,53 +231,5 @@ public class UIMain extends Application {
 
     public static void main(String[] args) {
         launch();
-    }
-
-    public static void drawElement(int x, int y, int size, Color color, Canvas canvas) {
-        x = fromNormalXToCanvasX(x, canvas);
-        y = fromNormalYToCanvasY(y, canvas);
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setFill(color);
-        graphicsContext.setLineWidth(1);
-        graphicsContext.setStroke(color);
-        drawHuman(x, y, graphicsContext);
-        if (size == 1) return;
-        x -= 6;
-        drawHuman(x, y, graphicsContext);
-        x += 12;
-        drawHuman(x, y, graphicsContext);
-        if (size < 11) return;
-        x -= 18;
-        drawHuman(x, y, graphicsContext);
-        x += 24;
-        drawHuman(x, y, graphicsContext);
-    }
-
-    private static void drawHuman(int x, int y, GraphicsContext graphicsContext) {
-        graphicsContext.fillOval(x - 3, y - 3, 6, 6);
-        graphicsContext.strokeLine(x, y + 3, x, y + 8);
-        graphicsContext.strokeLine(x, y + 8, x - 3, y + 12);
-        graphicsContext.strokeLine(x, y + 8, x + 3, y + 12);
-        graphicsContext.strokeLine(x, y + 3, x + 3, y + 9);
-        graphicsContext.strokeLine(x, y + 3, x - 3, y + 9);
-    }
-
-    public static void drawAxis(Canvas canvas) {
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        graphicsContext.setStroke(Color.BLACK);
-        graphicsContext.strokeLine(canvas.getWidth() / 2, 0, canvas.getWidth() / 2, canvas.getHeight());
-        graphicsContext.strokeLine(0, canvas.getHeight() / 2, canvas.getWidth(), canvas.getHeight() / 2);
-    }
-
-    public static int fromNormalXToCanvasX(int x, Canvas canvas) {
-        return (int) canvas.getWidth() / 2 + x;
-    }
-
-    public static int fromNormalYToCanvasY(int y, Canvas canvas) {
-        return (int) canvas.getHeight() / 2 - y;
-    }
-
-    public static int calculateDistance(int x1, int x2, int y1, int y2) {
-        return (int) Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 }

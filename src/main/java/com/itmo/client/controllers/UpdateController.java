@@ -96,7 +96,7 @@ public class UpdateController implements Initializable {
             return;
         }
         StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
-        if (FieldsValidator.complexCheckFields(studyGroupForUITable)) {
+        if (FieldsValidator.complexCheckFields(studyGroupForUITable) && FieldsValidator.checkUniquenessCoordinate(studyGroupForUITable.getX(), studyGroupForUITable.getY(), UIMain.mainController.getStudyGroups())) {
             UpdateCommand command = new UpdateCommand();
             command.setStudyGroup(group);
             try {

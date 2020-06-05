@@ -85,8 +85,7 @@ public class FieldsValidator {
                 (group.getLocationName()==null || group.getLocationName().length()<20);
     }
 
-    public
-    static boolean checkUniquenessCoordinate(StudyGroupForUITable studyGroupForUITable, ObservableList<StudyGroupForUITable> groups){
-        return groups.filtered(s -> s.getX().equals(studyGroupForUITable.getX()) && s.getY().equals(studyGroupForUITable.getY())).size()==0;
+    public static boolean checkUniquenessCoordinate(Long x, Long y, ObservableList<StudyGroupForUITable> groups){
+        return groups.filtered(s -> s.getX().equals(x) && s.getY().equals(y)).size()==0;
     }
 }

@@ -3,7 +3,10 @@ package com.itmo.commands;
 import com.itmo.app.Application;
 import com.itmo.client.Client;
 import com.itmo.client.Main;
+import com.itmo.client.UIMain;
 import com.itmo.server.Session;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,10 +22,10 @@ public class ExecuteScriptCommand extends Command implements CommandWithInit {
         try {
             File file = new File(argument);
             Scanner fileScanner = new Scanner(file);
-            //Client client = Main.getActiveClient();
-            //client.incrementScriptCounter();
-            //client.getHandler().run(fileScanner);
-            //client.decrementScriptCounter();
+            Client client = UIMain.client;
+            client.incrementScriptCounter();
+            client.getHandler().run(fileScanner);
+            client.decrementScriptCounter();
             status = "Скрипт " + argument + " закончил исполнение";
             return;
         } catch (FileNotFoundException e) {

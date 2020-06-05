@@ -6,6 +6,7 @@ import com.itmo.commands.Command;
 import com.itmo.exceptions.StackIsLimitedException;
 import com.itmo.server.Response;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
 import java.net.*;
@@ -16,7 +17,10 @@ import java.net.*;
 public class Client {
     private SocketAddress socketAddress;
     private DatagramSocket socket;
+
+    @Getter @Setter
     private Handler handler;
+
     @Getter
     private User user;
     private SerializationManager<Command> commandSerializationManager = new SerializationManager<>();
@@ -24,15 +28,6 @@ public class Client {
     private int scriptCount = 0;
     private static final int STACK_SIZE = 10;
     private static final int DEFAULT_BUFFER_SIZE = 65536;
-
-
-    public Handler getHandler() {
-        return handler;
-    }
-
-    public void setHandler(Handler handler) {
-        this.handler = handler;
-    }
 
     //подключаемся к заданному порту и хосту
     public void connect(String host, int port) throws IOException {
@@ -69,6 +64,7 @@ public class Client {
             System.out.println("Сервер в данный момент недоступен...");
         } catch (ClassNotFoundException e) {
             System.out.println("Клиент ждал ответ в виде Response, а получил что-то непонятное...");
+
         }
         */
     }
