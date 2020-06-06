@@ -2,11 +2,8 @@ package com.itmo.commands;
 
 import com.itmo.app.Application;
 import com.itmo.client.Client;
-import com.itmo.client.Main;
 import com.itmo.client.UIMain;
 import com.itmo.server.Session;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.io.File;
 import java.io.FileNotFoundException;

@@ -13,6 +13,7 @@ import java.io.Console;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -29,6 +30,7 @@ public class RegisterCommand extends Command implements CommandWithInit {
         if (!application.getDataBaseManager().containsUserName(userForRegistration.getName())) {
             application.getDataBaseManager().addUser(userForRegistration);
             Session sessionActual = new Session(userForRegistration, new CommandHistory(CommandHistory.DEFAULT_HISTORY_SIZE));
+            sessionActual.setLastActivityDate(new Date());
             application.addSession(userForRegistration, sessionActual);
             user = userForRegistration;
             successfullyExecute = true;

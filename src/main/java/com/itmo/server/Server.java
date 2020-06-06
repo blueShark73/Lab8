@@ -9,6 +9,9 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
+import java.sql.Time;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.*;
 
 /**
@@ -39,6 +42,7 @@ public class Server {
     //создание нового потока для обработки запроса при каждом новом запросе
     public void run(Application application) {
         try {
+            checkUsers();
             Callable<SocketAddress> task = getTask();
             ExecutorService service = Executors.newFixedThreadPool(READ_POOL_SIZE);
             while (true) {
@@ -65,5 +69,17 @@ public class Server {
             } while (socketAddress == null);
             return socketAddress;
         };
+    }
+
+    //удаляем неактивных пользователей каждые 20 сек
+    private void checkUsers(){
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                application.checkAliveUsers();
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(timerTask, 60000, 20000);
     }
 }

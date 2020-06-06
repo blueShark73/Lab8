@@ -1,11 +1,9 @@
 package com.itmo.commands;
 
 import com.itmo.app.Application;
-import com.itmo.client.StudyGroupForUITable;
 import com.itmo.server.Session;
 import lombok.NonNull;
 
-import java.io.IOException;
 
 /**
  * команда добавляет элемент, если он больше максимального элемента коллекции

@@ -15,7 +15,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.IOException;
-import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
@@ -106,6 +105,7 @@ public class Application {
 
     /**
      * возвращает сессию из активных по пользователю
+     *
      * @param user - текущий пользователь
      * @return сессия
      */
@@ -130,7 +130,7 @@ public class Application {
         activeSessions.remove(user, session);
     }
 
-    public void sendCollectionToClient(DatagramChannel datagramChannel, SocketAddress socketAddress){
+    public void sendCollectionToClient(DatagramChannel datagramChannel, SocketAddress socketAddress) {
         SerializationManager<ServerNotification> serializationManager = new SerializationManager<>();
         collection.forEach(studyGroup -> {
             AddServerNotification notification = new AddServerNotification(new StudyGroupForUITable(studyGroup));
@@ -141,5 +141,13 @@ public class Application {
                 e.printStackTrace();
             }
         });
+    }
+
+    //отключаем польхователя, если в течении пяти минут он не посылает команды
+    public void checkAliveUsers() {
+        for (Session session : activeSessions.values()) {
+            if (new Date().getTime() - session.getLastActivityDate().getTime() > 300000)
+                activeSessions.remove(session.getUser());
+        }
     }
 }

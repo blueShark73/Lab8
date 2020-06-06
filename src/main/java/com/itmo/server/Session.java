@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.net.SocketAddress;
+import java.util.Date;
 
 /**
  * класс сессии
@@ -17,6 +18,7 @@ public class Session implements Serializable {
     private User user;
     private CommandHistory history;
     private SocketAddress socketAddress;
+    private Date lastActivityDate;
 
     public Session(User user, CommandHistory history){
         this.user = user;

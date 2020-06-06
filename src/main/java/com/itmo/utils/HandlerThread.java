@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.DatagramChannel;
+import java.util.Date;
 
 /**
  * поток для обработки запроса от клиента
@@ -40,7 +41,10 @@ public class HandlerThread extends Thread {
             String result;
             try {
                 result = command.execute(application, session);
-                if (session != null) session.getHistory().add(command);
+                if (session != null) {
+                    session.getHistory().add(command);
+                    session.setLastActivityDate(new Date());
+                }
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 result = "Ошибка на сервере. Команда не выполнена" +
