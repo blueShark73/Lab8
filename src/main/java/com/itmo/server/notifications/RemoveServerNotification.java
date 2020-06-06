@@ -1,7 +1,7 @@
 package com.itmo.server.notifications;
 
 import com.itmo.client.StudyGroupForUITable;
-import javafx.collections.ObservableList;
+import com.itmo.client.controllers.MainController;
 import lombok.AllArgsConstructor;
 
 import java.io.Serializable;
@@ -11,9 +11,9 @@ public class RemoveServerNotification implements ServerNotification, Serializabl
     private Long id;
 
     @Override
-    public void updateData(ObservableList<StudyGroupForUITable> list) {
-        try {
-            list.removeIf(e -> e.getId().equals(id));
-        } catch (IllegalStateException ignored){}
+    public void updateData(MainController mainController) {
+        StudyGroupForUITable studyGroupForUITable = mainController.getStudyGroups().filtered(e -> e.getId().equals(id)).get(0);
+        mainController.getStudyGroups().remove(studyGroupForUITable);
+        mainController.getPainter().drawWithRemoving(studyGroupForUITable, mainController.getStudyGroups());
     }
 }

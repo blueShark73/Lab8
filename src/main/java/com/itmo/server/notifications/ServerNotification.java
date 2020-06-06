@@ -1,8 +1,9 @@
 package com.itmo.server.notifications;
 
 import com.itmo.client.StudyGroupForUITable;
+import com.itmo.client.controllers.MainController;
 import javafx.collections.ObservableList;
 
 public interface ServerNotification {
-    void updateData(ObservableList<StudyGroupForUITable> list);
+    void updateData(MainController mainController);
 }

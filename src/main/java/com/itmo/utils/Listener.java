@@ -33,15 +33,13 @@ public class Listener extends Thread {
             byte[] data = new SerializationManager<Command>().writeObject(command);
             DatagramPacket packet = new DatagramPacket(data, data.length, socketAddress);
             datagramSocket.send(packet);
+            mainController.getPainter().run(mainController);
             while (true) {
                 data = new byte[SIZE];
                 packet = new DatagramPacket(data, data.length);
                 datagramSocket.receive(packet);
                 ServerNotification notification = serializationManager.readObject(packet.getData());
-                try {
-                    notification.updateData(mainController.getStudyGroups());
-                } catch (IllegalStateException ignored){}
-                mainController.redraw();
+                mainController.getPainter().addNotification(notification);
             }
 
         } catch (IOException | ClassNotFoundException e) {

@@ -167,8 +167,6 @@ public class MainController implements Initializable {
     @Getter
     private Stage updateStage;
 
-    private Listener listener;
-
     @Getter
     private String info;
 
@@ -178,6 +176,7 @@ public class MainController implements Initializable {
     @Getter
     private Stage executeStage;
 
+    @Getter
     private Painter painter;
 
     private Color getRandomColor() {
@@ -199,17 +198,8 @@ public class MainController implements Initializable {
             painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), getRandomColor());
         }
 
-        listener = new Listener(UIMain.PORT, UIMain.HOST, this);
+        Listener listener = new Listener(UIMain.PORT, UIMain.HOST, this);
         listener.start();
-    }
-
-    public void redraw() {
-        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        painter.drawAxis();
-        for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
-            Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
-            painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color);
-        }
     }
 
     private void clickAddButtons() {
