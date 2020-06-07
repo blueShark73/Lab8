@@ -4,7 +4,6 @@ import com.itmo.client.UIMain;
 import com.itmo.client.controllers.MainController;
 import com.itmo.commands.AddListenerCommand;
 import com.itmo.commands.Command;
-import com.itmo.server.Response;
 import com.itmo.server.notifications.ServerNotification;
 import lombok.AllArgsConstructor;
 

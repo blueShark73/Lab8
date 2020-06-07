@@ -4,7 +4,10 @@ import com.itmo.app.Handler;
 import com.itmo.client.controllers.AuthController;
 import com.itmo.client.controllers.MainController;
 import com.itmo.server.Server;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,7 +15,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+import java.sql.Time;
 import java.util.*;
 
 public class UIMain extends Application {

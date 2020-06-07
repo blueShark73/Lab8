@@ -3,26 +3,24 @@ package com.itmo.utils;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.controllers.MainController;
 import com.itmo.server.notifications.ServerNotification;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Painter {
-    private static final double HEIGHT=24, WIDTH=24;
+    private static final double HEIGHT = 24, WIDTH = 24;
     private Canvas canvas;
-    private BlockingQueue<ServerNotification> queue = new ArrayBlockingQueue<>(100);
+    private ArrayBlockingQueue<ServerNotification> queue = new ArrayBlockingQueue<>(1000);
 
     public Painter(Canvas canvas) {
         this.canvas = canvas;
-    }
-
-    public void addNotification(ServerNotification notification) {
-        queue.add(notification);
     }
 
     public void run(MainController mainController) {
@@ -37,6 +35,15 @@ public class Painter {
             }
         });
         thread.start();
+    }
+
+    public void addNotification(ServerNotification notification) {
+        queue.add(notification);
+    }
+
+    public void executeTasks(MainController mainController) {
+        queue.forEach(notification -> notification.updateData(mainController));
+        queue.clear();
     }
 
     public void drawElement(int x, int y, int size, Color color) {
@@ -136,24 +143,31 @@ public class Painter {
         graphicsContext.strokeOval(x + 5 * xDif / 6, y + 5 * yDif / 6, w / 6, h / 6);
     }
 
-    private void createPortal(double x , double y, double leftUpX, double leftUpY, ObservableList<StudyGroupForUITable> list) throws InterruptedException {
+    private void createPortal(double x, double y, double leftUpX, double leftUpY, ObservableList<StudyGroupForUITable> list) throws InterruptedException {
         while (leftUpX > x - WIDTH / 2 || leftUpY > y - HEIGHT / 2) {
-            Thread.sleep(20);
-            leftUpX -= WIDTH / 30;
-            leftUpY -= HEIGHT / 30;
-            redraw(list);
-            drawPortal(leftUpX, leftUpY, (x - leftUpX) * 2, (y - leftUpY) * 2, x - leftUpX, y - leftUpY);
+            Thread.sleep(50);
+            leftUpX -= WIDTH / 5;
+            leftUpY -= HEIGHT / 5;
+            double finalLeftUpX = leftUpX, finalLeftUpY = leftUpY;
+            Platform.runLater(() -> {
+                redraw(list);
+                drawPortal(finalLeftUpX, finalLeftUpY, (x - finalLeftUpX) * 2, (y - finalLeftUpY) * 2, x - finalLeftUpX, y - finalLeftUpY);
+            });
         }
     }
 
     private void hidePortal(double x, double y, double leftUpX, double leftUpY, StudyGroupForUITable studyGroupForUITable, ObservableList<StudyGroupForUITable> list, Color color, boolean showGroup) throws InterruptedException {
         while (leftUpX < x || leftUpY < y) {
-            Thread.sleep(20);
-            leftUpX += WIDTH / 30;
-            leftUpY += HEIGHT / 30;
-            redraw(list);
-            drawPortal(leftUpX, leftUpY, (x - leftUpX) * 2, (y - leftUpY) * 2, x - leftUpX, y - leftUpY);
-           if(showGroup) drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color);
+            Thread.sleep(50);
+            leftUpX += WIDTH / 5;
+            leftUpY += HEIGHT / 5;
+            double finalLeftUpX = leftUpX, finalLeftUpY = leftUpY;
+            Platform.runLater(() -> {
+                redraw(list);
+                drawPortal(finalLeftUpX, finalLeftUpY, (x - finalLeftUpX) * 2, (y - finalLeftUpY) * 2, x - finalLeftUpX, y - finalLeftUpY);
+                if (showGroup)
+                    drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color);
+            });
         }
     }
 
@@ -163,14 +177,12 @@ public class Painter {
         double leftUpX = x, leftUpY = y, kf = 0;
         Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
         createPortal(x, y, leftUpX, leftUpY, list);
-        leftUpX = x-WIDTH/2;
-        leftUpY = y-HEIGHT/2;
+        leftUpX = x - WIDTH / 2;
+        leftUpY = y - HEIGHT / 2;
         while (kf < 1) {
-            Thread.sleep(10);
-            kf += 0.04;
-            redraw(list);
-            drawPortal(leftUpX, leftUpY, (x - leftUpX) * 2, (y - leftUpY) * 2, x - leftUpX, y - leftUpY);
-            drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color, kf);
+            Thread.sleep(50);
+            kf += 0.25;
+            workWithHumans(leftUpX, leftUpY, x, y, studyGroupForUITable, list, kf, color);
         }
         hidePortal(x, y, leftUpX, leftUpY, studyGroupForUITable, list, color, true);
     }
@@ -180,17 +192,23 @@ public class Painter {
         int x = fromNormalXToCanvasX(studyGroupForUITable.getX().intValue()), y = fromNormalYToCanvasY(studyGroupForUITable.getY().intValue());
         double leftUpX = x, leftUpY = y, kf = 1;
         Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
-        createPortal(x ,y, leftUpX, leftUpY, list);
-        leftUpX = x-WIDTH/2;
-        leftUpY = y-HEIGHT/2;
+        createPortal(x, y, leftUpX, leftUpY, list);
+        leftUpX = x - WIDTH / 2;
+        leftUpY = y - HEIGHT / 2;
         while (kf > 0) {
-            Thread.sleep(20);
-            kf -= 0.05;
+            Thread.sleep(50);
+            kf -= 0.25;
+            workWithHumans(leftUpX, leftUpY, x, y, studyGroupForUITable, list, kf, color);
+        }
+        hidePortal(x, y, leftUpX, leftUpY, studyGroupForUITable, list, color, false);
+        Platform.runLater(() -> redraw(list));
+    }
+
+    private void workWithHumans(double leftUpX, double leftUpY, double x, double y, StudyGroupForUITable studyGroupForUITable, ObservableList<StudyGroupForUITable> list, double kf, Color color) {
+        Platform.runLater(() -> {
             redraw(list);
             drawPortal(leftUpX, leftUpY, (x - leftUpX) * 2, (y - leftUpY) * 2, x - leftUpX, y - leftUpY);
             drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color, kf);
-        }
-        hidePortal(x, y, leftUpX, leftUpY, studyGroupForUITable, list, color, false);
-        redraw(list);
+        });
     }
 }
