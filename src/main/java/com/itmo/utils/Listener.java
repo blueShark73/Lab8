@@ -4,8 +4,10 @@ import com.itmo.client.UIMain;
 import com.itmo.client.controllers.MainController;
 import com.itmo.commands.AddListenerCommand;
 import com.itmo.commands.Command;
+import com.itmo.server.Main;
 import com.itmo.server.notifications.ServerNotification;
 import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -19,6 +21,11 @@ public class Listener extends Thread {
     private String host;
     private MainController mainController;
     private static final int SIZE = 65536;
+
+    public void changeController(MainController mainController){
+        this.mainController = mainController;
+        mainController.getPainter().run(mainController);
+    }
 
     @Override
     public void run() {

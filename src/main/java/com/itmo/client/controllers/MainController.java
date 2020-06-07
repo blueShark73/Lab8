@@ -34,9 +34,9 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MainController implements Initializable {
     @FXML
@@ -130,7 +130,16 @@ public class MainController implements Initializable {
     private Button sumButton;
 
     @FXML
+    private Button translateButton;
+
+    @FXML
+    private ChoiceBox<String> langChoiceBox;
+
+    @FXML
     private TextField filteredValue;
+
+    @FXML
+    private Label userNameLabel;
 
     @FXML
     @Getter
@@ -181,11 +190,9 @@ public class MainController implements Initializable {
     @Getter
     private Painter painter;
 
-    private Color getRandomColor() {
-        return Color.color(Math.random(), Math.random(), Math.random());
-    }
+    private Listener listener;
 
-    public void callExitFromScript(){
+    public void callExitFromScript() {
         System.exit(0);
     }
 
@@ -193,14 +200,20 @@ public class MainController implements Initializable {
         Color userColor = UIMain.client.getUser().getColor();
         userColorRectangle.setFill(userColor);
 
-        currentUserLabel.setText(currentUserLabel.getText() + UIMain.client.getUser().getName());
+        userNameLabel.setText(UIMain.client.getUser().getName());
 
         painter.drawAxis();
         for (StudyGroupForUITable studyGroupForUITable : studyGroups) {
-            painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), getRandomColor());
+            Color color = Color.color(studyGroupForUITable.getRed(), studyGroupForUITable.getGreen(), studyGroupForUITable.getBlue());
+            painter.drawElement(studyGroupForUITable.getX().intValue(), studyGroupForUITable.getY().intValue(), studyGroupForUITable.getStudentsCount().intValue(), color);
         }
 
-        Listener listener = new Listener(UIMain.PORT, UIMain.HOST, this);
+        if (UIMain.state != null) {
+            listener = UIMain.state.getListener();
+            listener.changeController(this);
+            return;
+        }
+        listener = new Listener(UIMain.PORT, UIMain.HOST, this);
         listener.start();
     }
 
@@ -221,31 +234,31 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void clickExecuteButton(){
-        try{
+    private void clickExecuteButton() {
+        try {
             Parent parent = FXMLLoader.load(getClass().getResource("/views/execute.fxml"));
             executeStage = new Stage();
             executeStage.setScene(new Scene(parent));
             executeStage.setTitle("Executing scripts");
             executeStage.show();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void clickSumButton(){
+    private void clickSumButton() {
         try {
             Response response = UIMain.client.sendCommandAndReceiveAnswer(new SumOfStudentsCountCommand());
             stateText.setText(response.getAnswer());
             stateText.setFill(Color.GREEN);
-        } catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void clickInfoButton(){
+    private void clickInfoButton() {
         try {
             info = UIMain.client.sendCommandAndReceiveAnswer(new InfoCommand()).getAnswer();
 
@@ -254,13 +267,13 @@ public class MainController implements Initializable {
             infoStage.setScene(new Scene(parent));
             infoStage.setTitle("Information about collection");
             infoStage.show();
-        } catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void clickHistoryButton(){
+    private void clickHistoryButton() {
         try {
             Response response = UIMain.client.sendCommandAndReceiveAnswer(new HistoryCommand());
             String[] commands = response.getAnswer().split("\n");
@@ -295,7 +308,7 @@ public class MainController implements Initializable {
         int index = tableView.getSelectionModel().getFocusedIndex();
         StudyGroupForUITable studyGroupForUITable = studyGroups.get(index);
         Long id = studyGroupForUITable.getId();
-        if(!checkPermission(studyGroupForUITable)) return;
+        if (!checkPermission(studyGroupForUITable)) return;
         RemoveCommand command = new RemoveCommand();
         command.setId(id);
         try {
@@ -330,50 +343,35 @@ public class MainController implements Initializable {
             return;
         }
         try {
-            switch (field) {
-                case "Id":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId().equals(Long.parseLong(value)));
-                    break;
-                case "Name":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().contains(value));
-                    break;
-                case "CreationDate":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().equals(value));
-                    break;
-                case "StudentsCount":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount().equals(Long.parseLong(value)));
-                    break;
-                case "FormOfEducation":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().contains(value));
-                    break;
-                case "Semester":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getSemester().contains(value));
-                    break;
-                case "AdminName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().contains(value));
-                    break;
-                case "Height":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight().equals(Long.parseLong(value)));
-                    break;
-                case "Weight":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight().equals(Long.parseLong(value)));
-                    break;
-                case "PassportID":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().contains(value));
-                    break;
-                case "LocationName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().contains(value));
-                    break;
-                case "Owner":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().contains(value));
-                    break;
-            }
+            if (field.equals(idColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId().equals(Long.parseLong(value)));
+            else if (field.equals(nameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().contains(value));
+            else if (field.equals(creationDateColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().equals(value));
+            else if (field.equals(studentsCountColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount().equals(Long.parseLong(value)));
+            else if (field.equals(formOfEducationColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().contains(value));
+            else if (field.equals(semesterColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getSemester().contains(value));
+            else if (field.equals(adminNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().contains(value));
+            else if (field.equals(heightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight().equals(Long.parseLong(value)));
+            else if (field.equals(weightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight().equals(Long.parseLong(value)));
+            else if (field.equals(passportIdColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().contains(value));
+            else if (field.equals(locationNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().contains(value));
+            else if (field.equals(ownerColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().contains(value));
             tableView.setItems(filteredList);
         } catch (NumberFormatException e) {
             stateText.setFill(Color.RED);
             stateText.setText("Parse error");
         }
-
     }
 
     @FXML
@@ -386,44 +384,30 @@ public class MainController implements Initializable {
             return;
         }
         try {
-            switch (field) {
-                case "Id":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId() > Long.parseLong(value));
-                    break;
-                case "Name":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value) > 0);
-                    break;
-                case "CreationDate":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value) > 0);
-                    break;
-                case "StudentsCount":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount() > Long.parseLong(value));
-                    break;
-                case "FormOfEducation":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value) > 0);
-                    break;
-                case "Semester":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester()) > Semester.getNumberByEnglish(value));
-                    break;
-                case "AdminName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value) > 0);
-                    break;
-                case "Height":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight() > Long.parseLong(value));
-                    break;
-                case "Weight":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight() > Long.parseLong(value));
-                    break;
-                case "PassportID":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value) > 0);
-                    break;
-                case "LocationName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value) > 0);
-                    break;
-                case "Owner":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value) > 0);
-                    break;
-            }
+            if (field.equals(idColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId() > Long.parseLong(value));
+            else if (field.equals(nameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value) > 0);
+            else if (field.equals(creationDateColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value) > 0);
+            else if (field.equals(studentsCountColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount() > Long.parseLong(value));
+            else if (field.equals(formOfEducationColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value) > 0);
+            else if (field.equals(semesterColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester()) > Semester.getNumberByEnglish(value));
+            else if (field.equals(adminNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value) > 0);
+            else if (field.equals(heightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight() > Long.parseLong(value));
+            else if (field.equals(weightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight() > Long.parseLong(value));
+            else if (field.equals(passportIdColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value) > 0);
+            else if (field.equals(locationNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value) > 0);
+            else if (field.equals(ownerColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value) > 0);
             tableView.setItems(filteredList);
         } catch (NumberFormatException | NullPointerException e) {
             stateText.setFill(Color.RED);
@@ -441,44 +425,30 @@ public class MainController implements Initializable {
             return;
         }
         try {
-            switch (field) {
-                case "Id":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId() < Long.parseLong(value));
-                    break;
-                case "Name":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value) < 0);
-                    break;
-                case "CreationDate":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value) < 0);
-                    break;
-                case "StudentsCount":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount() < Long.parseLong(value));
-                    break;
-                case "FormOfEducation":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value) < 0);
-                    break;
-                case "Semester":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester()) < Semester.getNumberByEnglish(value));
-                    break;
-                case "AdminName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value) < 0);
-                    break;
-                case "Height":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight() < Long.parseLong(value));
-                    break;
-                case "Weight":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight() < Long.parseLong(value));
-                    break;
-                case "PassportID":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value) < 0);
-                    break;
-                case "LocationName":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value) < 0);
-                    break;
-                case "Owner":
-                    filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value) < 0);
-                    break;
-            }
+            if (field.equals(idColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getId() < Long.parseLong(value));
+            else if (field.equals(nameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getName().compareTo(value) < 0);
+            else if (field.equals(creationDateColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getCreationDate().compareTo(value) < 0);
+            else if (field.equals(studentsCountColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getStudentsCount() < Long.parseLong(value));
+            else if (field.equals(formOfEducationColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getFormOfEducation().compareTo(value) < 0);
+            else if (field.equals(semesterColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> Semester.getNumberByEnglish(studyGroupForUITable.getSemester()) < Semester.getNumberByEnglish(value));
+            else if (field.equals(adminNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getAdminName().compareTo(value) < 0);
+            else if (field.equals(heightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getHeight() < Long.parseLong(value));
+            else if (field.equals(weightColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getWeight() < Long.parseLong(value));
+            else if (field.equals(passportIdColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getPassportID().compareTo(value) < 0);
+            else if (field.equals(locationNameColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getLocationName().compareTo(value) < 0);
+            else if (field.equals(ownerColumn.getText()))
+                filteredList = studyGroups.filtered(studyGroupForUITable -> studyGroupForUITable.getOwner().compareTo(value) < 0);
             tableView.setItems(filteredList);
         } catch (NumberFormatException | NullPointerException e) {
             stateText.setFill(Color.RED);
@@ -516,6 +486,31 @@ public class MainController implements Initializable {
     private void clickAddIfMaxButton(ActionEvent event) {
         setMaxButton(true);
         clickAddButtons();
+    }
+
+    @FXML
+    private void clickTranslate() {
+        switch (langChoiceBox.getValue()) {
+            case "Русский":
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"));
+                break;
+            case "Polskie":
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("POL"));
+                break;
+            case "Íslensku":
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("ICE"));
+                break;
+            case "Español":
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("SPA"));
+                break;
+        }
+        UIMain.state = new State(studyGroups, langChoiceBox.getValue(), listener);
+        Scene scene = UIMain.mainStage.getScene();
+        try {
+            scene.setRoot(FXMLLoader.load(getClass().getResource("/views/main.fxml"), UIMain.resourceBundle));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -565,12 +560,12 @@ public class MainController implements Initializable {
         return false;
     }
 
-    private void setOutOfRange(){
+    private void setOutOfRange() {
         stateText.setFill(Color.RED);
         stateText.setText("Out of range");
     }
 
-    private void setParseError(){
+    private void setParseError() {
         stateText.setFill(Color.RED);
         stateText.setText("Parse error");
     }
@@ -602,7 +597,7 @@ public class MainController implements Initializable {
         studentsCountColumn.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         studentsCountColumn.setOnEditCommit(event -> {
             StudyGroupForUITable group = event.getTableView().getItems().get(event.getTablePosition().getRow());
-            if (!checkPermission(group)){
+            if (!checkPermission(group)) {
                 tableView.refresh();
                 return;
             }
@@ -622,7 +617,7 @@ public class MainController implements Initializable {
                 tableView.refresh();
                 return;
             }
-            if (Semester.getValueByEnglish(event.getNewValue())==null) {
+            if (Semester.getValueByEnglish(event.getNewValue()) == null) {
                 setParseError();
                 tableView.refresh();
                 return;
@@ -638,7 +633,7 @@ public class MainController implements Initializable {
                 tableView.refresh();
                 return;
             }
-            if (FormOfEducation.getValueByEnglish(event.getNewValue())==null) {
+            if (FormOfEducation.getValueByEnglish(event.getNewValue()) == null) {
                 setParseError();
                 tableView.refresh();
                 return;
@@ -666,7 +661,7 @@ public class MainController implements Initializable {
         heightColumn.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         heightColumn.setOnEditCommit(event -> {
             StudyGroupForUITable group = event.getTableView().getItems().get(event.getTablePosition().getRow());
-            if (!checkPermission(group)){
+            if (!checkPermission(group)) {
                 tableView.refresh();
                 return;
             }
@@ -740,13 +735,20 @@ public class MainController implements Initializable {
         locationNameColumn.setCellValueFactory(new PropertyValueFactory<>("locationName"));
         ownerColumn.setCellValueFactory(new PropertyValueFactory<>("owner"));
 
-        studyGroups = FXCollections.observableArrayList();
+        studyGroups = UIMain.state == null ? FXCollections.observableArrayList() : UIMain.state.getStudyGroupForUITables();
 
         tableView.setItems(studyGroups);
 
-        ObservableList<String> fields = FXCollections.observableArrayList("Id", "Name", "CreationDate",
-                "StudentsCount", "FormOfEducation", "Semester", "AdminName", "Height", "Weight", "PassportID", "LocationName", "Owner");
+        ObservableList<String> fields = FXCollections.observableArrayList(idColumn.getText(), nameColumn.getText(),
+                creationDateColumn.getText(), studentsCountColumn.getText(), formOfEducationColumn.getText(), semesterColumn.getText(),
+                adminNameColumn.getText(), heightColumn.getText(), weightColumn.getText(), passportIdColumn.getText(),
+                locationNameColumn.getText(), ownerColumn.getText());
         fieldChoiceBox.setItems(fields);
         fieldChoiceBox.setValue("Name");
+
+        ObservableList<String> languages = FXCollections.observableArrayList("Русский", "Español", "Íslensku", "Polskie");
+        langChoiceBox.setItems(languages);
+        langChoiceBox.setValue(UIMain.state == null ? "Русский" : UIMain.state.getCurrentLang());
+        if (UIMain.state != null) setValues();
     }
 }

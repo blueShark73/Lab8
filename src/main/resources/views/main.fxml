@@ -19,7 +19,7 @@
     <children>
         <HBox alignment="CENTER_RIGHT" layoutX="-2.0" prefHeight="34.0" prefWidth="1104.0" spacing="10.0">
             <children>
-            <HBox alignment="CENTER" prefHeight="34.0" prefWidth="778.0">
+            <HBox alignment="CENTER" prefHeight="34.0" prefWidth="458.0">
                <children>
                   <Text fx:id="stateText" strokeType="OUTSIDE" strokeWidth="0.0">
                      <font>
@@ -28,33 +28,39 @@
                   </Text>
                </children>
             </HBox>
-                <Label prefHeight="18.0" prefWidth="83.0" text="Your color:" />
+            <ChoiceBox fx:id="langChoiceBox" prefHeight="26.0" prefWidth="101.0" />
+            <Button fx:id="translateButton" mnemonicParsing="false" onAction="#clickTranslate" prefHeight="27.0" prefWidth="86.0" text="%translate.text" />
+                <Label prefHeight="18.0" prefWidth="72.0" text="%yourColor.text" />
                 <Rectangle fx:id="userColorRectangle" arcHeight="5.0" arcWidth="5.0" fill="#f7f9fa" height="23.0" stroke="BLACK" strokeType="INSIDE" width="24.0" />
-                <Label fx:id="currentUserLabel" prefHeight="30.0" prefWidth="173.0" text="Current user: " />
-                <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="97.0" text="Exit" onAction="#clickExitButton"/>
+                <Label fx:id="currentUserLabel" prefHeight="30.0" prefWidth="142.0" text="%currentUser.text" />
+            <Label fx:id="userNameLabel" prefHeight="18.0" prefWidth="80.0" />
+                <Button mnemonicParsing="false" onAction="#clickExitButton" prefHeight="26.0" prefWidth="71.0" text="%exit.text" />
             </children>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
         </HBox>
         <HBox alignment="TOP_CENTER" layoutX="-2.0" layoutY="34.0" prefHeight="34.0" prefWidth="1104.0" spacing="15.0">
             <children>
-            <Button fx:id="executeButton" mnemonicParsing="false" text="Execute script" onAction="#clickExecuteButton"/>
-            <Button fx:id="sumButton" mnemonicParsing="false" text="Sum of studetsCount" onAction="#clickSumButton"/>
-                <Button fx:id="clearButton" mnemonicParsing="false" text="Remove my elements" onAction="#clickClearButton"/>
-                <Button fx:id="helpButton" mnemonicParsing="false" text="Help me" />
-                <Button fx:id="historyButton" mnemonicParsing="false" text="History" onAction="#clickHistoryButton"/>
-                <Button fx:id="infoButton" mnemonicParsing="false" text="Information about collection" onAction="#clickInfoButton"/>
-                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemoveButton" text="Remove element" />
-                <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickUpdateButton" text="Update fields" />
+            <Button fx:id="executeButton" mnemonicParsing="false" onAction="#clickExecuteButton" text="%execute.text" />
+            <Button fx:id="sumButton" mnemonicParsing="false" onAction="#clickSumButton" text="%sum.text" />
+                <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clickClearButton" text="%removeAll.text" />
+                <Button fx:id="helpButton" mnemonicParsing="false" text="%help.text" />
+                <Button fx:id="historyButton" mnemonicParsing="false" onAction="#clickHistoryButton" text="%history.text" />
+                <Button fx:id="infoButton" mnemonicParsing="false" onAction="#clickInfoButton" text="%info.text" />
+                <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemoveButton" text="%remove.text" />
+                <Button fx:id="updateButton" layoutX="663.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickUpdateButton" text="%update.text" />
             </children>
         </HBox>
         <HBox alignment="CENTER_LEFT" layoutY="68.0" prefHeight="38.0" prefWidth="1102.0" spacing="10.0">
             <children>
-                <Label text="Value:" />
-                <TextField fx:id="filteredValue" prefHeight="26.0" prefWidth="137.0" text=""/>
-                <Label text="Select column:" />
+                <Label text="%value.text" />
+                <TextField fx:id="filteredValue" prefHeight="26.0" prefWidth="137.0" text="" />
+                <Label text="%select.text" />
                 <ChoiceBox fx:id="fieldChoiceBox" prefWidth="150.0" />
-                <Button fx:id="findButton" mnemonicParsing="false" text="Find" onAction="#clickFindButton"/>
-            <Button fx:id="findGreaterButton" mnemonicParsing="false" text="Find greater" onAction="#clickFindGreaterButton"/>
-            <Button fx:id="findLessButton" mnemonicParsing="false" text="Find less" onAction="#clickFindLessButton"/>
+                <Button fx:id="findButton" mnemonicParsing="false" onAction="#clickFindButton" text="%find.text" />
+            <Button fx:id="findGreaterButton" mnemonicParsing="false" onAction="#clickFindGreaterButton" text="%findGreater.text" />
+            <Button fx:id="findLessButton" mnemonicParsing="false" onAction="#clickFindLessButton" text="%findLess.text" />
             </children>
             <padding>
                 <Insets left="10.0" />
@@ -64,22 +70,22 @@
             <children>
                 <TableView fx:id="tableView" prefHeight="278.0" prefWidth="1100.0">
                     <columns>
-                        <TableColumn fx:id="idColumn" prefWidth="59.19998246431351" text="Id" />
-                        <TableColumn fx:id="nameColumn" prefWidth="91.20000839233398" text="Name" />
-                        <TableColumn fx:id="creationDateColumn" prefWidth="128.00003051757812" text="CreationDate" />
-                        <TableColumn fx:id="studentsCountColumn" prefWidth="89.5999755859375" text="StudentsCount" />
-                        <TableColumn fx:id="formOfEducationColumn" prefWidth="128.79998779296875" text="FormOfEducation" />
-                        <TableColumn fx:id="semesterColumn" prefWidth="85.60000610351562" text="Semester" />
-                        <TableColumn fx:id="groupAdminColumn" minWidth="0.0" prefWidth="392.7999267578125" text="GroupAdmin">
+                        <TableColumn fx:id="idColumn" prefWidth="59.19998246431351" text="%idColumn.text" />
+                        <TableColumn fx:id="nameColumn" prefWidth="91.20000839233398" text="%nameColumn.text" />
+                        <TableColumn fx:id="creationDateColumn" prefWidth="128.00003051757812" text="%creationDateColumn.text" />
+                        <TableColumn fx:id="studentsCountColumn" prefWidth="89.5999755859375" text="%studentsCountColumn.text" />
+                        <TableColumn fx:id="formOfEducationColumn" prefWidth="128.79998779296875" text="%formOfEducationColumn.text" />
+                        <TableColumn fx:id="semesterColumn" prefWidth="85.60000610351562" text="%semesterColumn.text" />
+                        <TableColumn fx:id="groupAdminColumn" minWidth="0.0" prefWidth="392.7999267578125" text="%groupAdminColumn.text">
                             <columns>
-                                <TableColumn fx:id="adminNameColumn" prefWidth="80.79998779296875" text="AdminName" />
-                                <TableColumn fx:id="heightColumn" prefWidth="61.5999755859375" text="Height" />
-                                <TableColumn fx:id="weightColumn" prefWidth="64.79998779296875" text="Weight" />
-                                <TableColumn fx:id="passportIdColumn" prefWidth="86.4000244140625" text="PassportID" />
-                                <TableColumn fx:id="locationNameColumn" prefWidth="86.4000244140625" text="LocationName" />
+                                <TableColumn fx:id="adminNameColumn" prefWidth="80.79998779296875" text="%adminNameColumn.text" />
+                                <TableColumn fx:id="heightColumn" prefWidth="61.5999755859375" text="%heightColumn.text" />
+                                <TableColumn fx:id="weightColumn" prefWidth="64.79998779296875" text="%weightColumn.text" />
+                                <TableColumn fx:id="passportIdColumn" prefWidth="86.4000244140625" text="%passportIdColumn.text" />
+                                <TableColumn fx:id="locationNameColumn" prefWidth="86.4000244140625" text="%locationNameColumn.text" />
                             </columns>
                         </TableColumn>
-                        <TableColumn fx:id="ownerColumn" prefWidth="139.1999755859374" text="Owner" />
+                        <TableColumn fx:id="ownerColumn" prefWidth="139.1999755859374" text="%ownerColumn.text" />
                     </columns>
                 </TableView>
             </children>
@@ -90,15 +96,15 @@
          </children></FlowPane>
       <HBox alignment="CENTER_LEFT" layoutX="-1.0" layoutY="101.0" prefHeight="38.0" prefWidth="1100.0" spacing="10.0">
          <children>
-            <Label text="Element's name for adding:">
+            <Label text="%nameForAdding.text">
                <padding>
                   <Insets left="10.0" />
                </padding>
             </Label>
             <TextField fx:id="nameTextField" prefHeight="26.0" prefWidth="123.0" />
-                <Button fx:id="addButton" mnemonicParsing="false" onAction="#clickAddButton" text="Add" />
-                <Button fx:id="addIfMinButton" mnemonicParsing="false" onAction="#clickAddIfMinButton" text="Add if min" />
-                <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#clickAddIfMaxButton" text="Add if max" />
+                <Button fx:id="addButton" mnemonicParsing="false" onAction="#clickAddButton" text="%add.text" />
+                <Button fx:id="addIfMinButton" mnemonicParsing="false" onAction="#clickAddIfMinButton" text="%addIfMin.text" />
+                <Button fx:id="addIfMaxButton" mnemonicParsing="false" onAction="#clickAddIfMaxButton" text="%addIfMax.text" />
          </children>
       </HBox>
     </children>
