@@ -5,6 +5,7 @@ import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.client.User;
 import com.itmo.server.Response;
+import com.itmo.utils.DateTimeAdapter;
 import com.itmo.utils.FieldsValidator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -92,7 +93,7 @@ public class AddController implements Initializable {
             stateText.setFill(Color.RED);
             return;
         }
-        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
+        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group, DateTimeAdapter.defaultDateFormat);
         if(FieldsValidator.complexCheckFields(studyGroupForUITable) && FieldsValidator.checkUniquenessCoordinate(studyGroupForUITable.getX(), studyGroupForUITable.getY(), UIMain.mainController.getStudyGroups())) {
             AddCommand command = new AddCommand();
             if(UIMain.mainController.isMaxButton()) command = new AddIfMaxCommand();

@@ -6,7 +6,7 @@
 
   <groupId>com.itmo</groupId>
   <artifactId>Lab8</artifactId>
-  <version>client</version>
+  <version>server</version>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -24,8 +24,8 @@
             <manifest>
               <addClasspath>true</addClasspath>
               <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>com.itmo.client.UIMain</mainClass>
-              <packageName>com.itmo.client</packageName>
+              <mainClass>com.itmo.server.Main</mainClass>
+              <packageName>com.itmo.server</packageName>
             </manifest>
           </archive>
         </configuration>
@@ -57,6 +57,7 @@
           <target>8</target>
         </configuration>
       </plugin>
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -78,6 +79,7 @@
           </execution>
         </executions>
       </plugin>
+      - -->
     </plugins>
   </build>
 

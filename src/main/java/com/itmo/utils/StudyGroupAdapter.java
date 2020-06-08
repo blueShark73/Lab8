@@ -20,7 +20,7 @@ public class StudyGroupAdapter {
                 studyGroupForUITable.getLocationName()));
         studyGroup.setGroupAdmin(person);
         try {
-            studyGroup.setCreationDate(DateTimeAdapter.parseToZonedDateTime(studyGroupForUITable.getCreationDate()));
+            studyGroup.setCreationDate(DateTimeAdapter.parseToZonedDateTime(studyGroupForUITable.getCreationDate(), studyGroupForUITable.getFormat()));
         } catch (ParseException e){
             e.printStackTrace();
             studyGroup.setCreationDate(ZonedDateTime.now());

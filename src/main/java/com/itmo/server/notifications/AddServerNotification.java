@@ -13,6 +13,6 @@ public class AddServerNotification implements ServerNotification, Serializable {
     @Override
     public void updateData(MainController mainController) {
         mainController.getPainter().drawWithAdding(studyGroupForUITable, mainController.getStudyGroups());
-        mainController.getStudyGroups().add(studyGroupForUITable);
+        mainController.addWithCheckingFormat(studyGroupForUITable);
     }
 }

@@ -5,6 +5,7 @@ import com.itmo.app.builder.StudyGroupCheckBuilder;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.server.Session;
 import com.itmo.server.notifications.NotificationManager;
+import com.itmo.utils.DateTimeAdapter;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.app.StudyGroup;
 import com.itmo.exceptions.InputFormatException;
@@ -12,6 +13,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Scanner;
 
 /**
@@ -62,7 +64,7 @@ public class AddCommand extends Command implements CommandWithInit {
 
     void notifyAboutAdding(NotificationManager notificationManager){
         try {
-            notificationManager.addElementNotification(new StudyGroupForUITable(studyGroup));
+            notificationManager.addElementNotification(new StudyGroupForUITable(studyGroup, DateTimeAdapter.defaultDateFormat));
         } catch (IOException e) {
             e.printStackTrace();
         }

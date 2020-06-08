@@ -34,7 +34,7 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -215,6 +215,11 @@ public class MainController implements Initializable {
         }
         listener = new Listener(UIMain.PORT, UIMain.HOST, this);
         listener.start();
+    }
+
+    public void addWithCheckingFormat(StudyGroupForUITable studyGroupForUITable){
+        studyGroupForUITable.changeDateFormat(new SimpleDateFormat(UIMain.resourceBundle.getString("dateFormat"), UIMain.resourceBundle.getLocale()));
+        studyGroups.add(studyGroupForUITable);
     }
 
     private void clickAddButtons() {
@@ -488,6 +493,10 @@ public class MainController implements Initializable {
         clickAddButtons();
     }
 
+    public void changeDateFormat(){
+        studyGroups.forEach(s -> s.changeDateFormat(new SimpleDateFormat(UIMain.resourceBundle.getString("dateFormat"), UIMain.resourceBundle.getLocale())));
+    }
+
     @FXML
     private void clickTranslate() {
         switch (langChoiceBox.getValue()) {
@@ -506,6 +515,7 @@ public class MainController implements Initializable {
         }
         UIMain.state = new State(studyGroups, langChoiceBox.getValue(), listener);
         Scene scene = UIMain.mainStage.getScene();
+        changeDateFormat();
         try {
             scene.setRoot(FXMLLoader.load(getClass().getResource("/views/main.fxml"), UIMain.resourceBundle));
         } catch (IOException e) {

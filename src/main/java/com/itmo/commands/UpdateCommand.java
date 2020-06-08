@@ -4,6 +4,7 @@ import com.itmo.app.Application;
 import com.itmo.app.builder.StudyGroupCheckBuilder;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.server.Session;
+import com.itmo.utils.DateTimeAdapter;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.app.StudyGroup;
 import com.itmo.exceptions.IdNotFoundException;
@@ -58,7 +59,7 @@ public class UpdateCommand extends Command implements CommandWithInit {
             }
             try {
                 application.getNotificationManager().removeElementNotification(studyGroup.getId());
-                application.getNotificationManager().addElementNotification(new StudyGroupForUITable(studyGroup));
+                application.getNotificationManager().addElementNotification(new StudyGroupForUITable(studyGroup, DateTimeAdapter.defaultDateFormat));
             } catch (IOException e){
                 e.printStackTrace();
             }

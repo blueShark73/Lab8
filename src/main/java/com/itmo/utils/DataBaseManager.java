@@ -90,7 +90,7 @@ public class DataBaseManager {
                     resultSet.getLong("id"),
                     resultSet.getString("name"),
                     coordinates,
-                    DateTimeAdapter.parseToZonedDateTime(resultSet.getDate("creation_date")),
+                    DateTimeAdapter.parseToZonedDateTime(resultSet.getTimestamp("creation_date")),
                     studentsCount,
                     FormOfEducation.valueOf(resultSet.getString("form_of_education")),
                     Semester.valueOf(resultSet.getString("semester")),
@@ -115,7 +115,7 @@ public class DataBaseManager {
             statement.setString(2, studyGroup.getName());
             statement.setLong(3, coordinates.getX());
             statement.setLong(4, coordinates.getY());
-            statement.setObject(5, studyGroup.getCreationDate().toLocalDate());
+            statement.setObject(5, DateTimeAdapter.parseToTimesTamp(studyGroup.getCreationDate()));
             statement.setLong(6, studyGroup.getStudentsCount());
             statement.setObject(7, studyGroup.getFormOfEducation().getEnglish());
             statement.setObject(8, studyGroup.getSemesterEnum().getEnglish());

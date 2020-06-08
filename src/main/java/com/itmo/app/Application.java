@@ -9,6 +9,7 @@ import com.itmo.server.notifications.AddServerNotification;
 import com.itmo.server.notifications.NotificationManager;
 import com.itmo.server.notifications.ServerNotification;
 import com.itmo.utils.DataBaseManager;
+import com.itmo.utils.DateTimeAdapter;
 import com.itmo.utils.FieldsValidator;
 import com.itmo.utils.SerializationManager;
 import lombok.Getter;
@@ -133,7 +134,7 @@ public class Application {
     public void sendCollectionToClient(DatagramChannel datagramChannel, SocketAddress socketAddress) {
         SerializationManager<ServerNotification> serializationManager = new SerializationManager<>();
         collection.forEach(studyGroup -> {
-            AddServerNotification notification = new AddServerNotification(new StudyGroupForUITable(studyGroup));
+            AddServerNotification notification = new AddServerNotification(new StudyGroupForUITable(studyGroup, DateTimeAdapter.defaultDateFormat));
             try {
                 ByteBuffer byteBuffer = ByteBuffer.wrap(serializationManager.writeObject(notification));
                 datagramChannel.send(byteBuffer, socketAddress);

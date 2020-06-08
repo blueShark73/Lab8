@@ -95,7 +95,7 @@ public class UpdateController implements Initializable {
             stateText.setFill(Color.RED);
             return;
         }
-        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group);
+        StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group, DateTimeAdapter.defaultDateFormat);
         if (FieldsValidator.complexCheckFields(studyGroupForUITable) && FieldsValidator.checkUniquenessCoordinate(studyGroupForUITable.getX(), studyGroupForUITable.getY(), UIMain.mainController.getStudyGroups())) {
             UpdateCommand command = new UpdateCommand();
             command.setStudyGroup(group);
