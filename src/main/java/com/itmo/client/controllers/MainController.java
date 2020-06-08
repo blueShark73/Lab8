@@ -210,10 +210,9 @@ public class MainController implements Initializable {
 
         if (UIMain.state != null) {
             listener = UIMain.state.getListener();
-            listener.changeController(this);
             return;
         }
-        listener = new Listener(UIMain.PORT, UIMain.HOST, this);
+        listener = new Listener(UIMain.PORT, UIMain.HOST);
         listener.start();
     }
 
@@ -229,7 +228,7 @@ public class MainController implements Initializable {
             return;
         }
         try {
-            Parent addWindow = FXMLLoader.load(getClass().getResource("/views/add.fxml"));
+            Parent addWindow = FXMLLoader.load(getClass().getResource("/views/add.fxml"), UIMain.resourceBundle);
             addStage = new Stage();
             addStage.setScene(new Scene(addWindow));
             addStage.show();
@@ -241,7 +240,7 @@ public class MainController implements Initializable {
     @FXML
     private void clickExecuteButton() {
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("/views/execute.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/execute.fxml"), UIMain.resourceBundle);
             executeStage = new Stage();
             executeStage.setScene(new Scene(parent));
             executeStage.setTitle("Executing scripts");
@@ -267,7 +266,7 @@ public class MainController implements Initializable {
         try {
             info = UIMain.client.sendCommandAndReceiveAnswer(new InfoCommand()).getAnswer();
 
-            Parent parent = FXMLLoader.load(getClass().getResource("/views/info.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/info.fxml"), UIMain.resourceBundle);
             infoStage = new Stage();
             infoStage.setScene(new Scene(parent));
             infoStage.setTitle("Information about collection");
@@ -284,7 +283,7 @@ public class MainController implements Initializable {
             String[] commands = response.getAnswer().split("\n");
             commandsForHistory = FXCollections.observableArrayList(commands);
 
-            Parent parent = FXMLLoader.load(getClass().getResource("/views/history.fxml"));
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/history.fxml"), UIMain.resourceBundle);
             historyStage = new Stage();
             historyStage.setScene(new Scene(parent));
             historyStage.setTitle("Command history");
@@ -467,7 +466,7 @@ public class MainController implements Initializable {
         selectedStudyGroupForUITable = studyGroups.get(index);
         if (!checkPermission(selectedStudyGroupForUITable)) return;
         try {
-            Parent updateWindow = FXMLLoader.load(getClass().getResource("/views/update.fxml"));
+            Parent updateWindow = FXMLLoader.load(getClass().getResource("/views/update.fxml"), UIMain.resourceBundle);
             updateStage = new Stage();
             updateStage.setScene(new Scene(updateWindow));
             updateStage.show();
@@ -513,7 +512,7 @@ public class MainController implements Initializable {
                 UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("SPA"));
                 break;
         }
-        UIMain.state = new State(studyGroups, langChoiceBox.getValue(), listener);
+        UIMain.state = new State(studyGroups, langChoiceBox.getValue(), listener, painter);
         Scene scene = UIMain.mainStage.getScene();
         changeDateFormat();
         try {
@@ -584,7 +583,11 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         UIMain.mainController = this;
-        painter = new Painter(canvas);
+        if(UIMain.state==null) painter = new Painter(canvas);
+        else {
+            painter = UIMain.state.getPainter();
+            painter.setCanvas(canvas);
+        }
 
         tableView.setEditable(true);
 

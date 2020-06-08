@@ -9,13 +9,14 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Painter {
     private static final double HEIGHT = 24, WIDTH = 24;
+    @Setter
     private Canvas canvas;
     private ArrayBlockingQueue<ServerNotification> queue = new ArrayBlockingQueue<>(1000);
 

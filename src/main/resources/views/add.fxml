@@ -11,19 +11,19 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="435.0" prefWidth="301.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.itmo.client.controllers.AddController">
    <children>
-      <Label layoutX="14.0" layoutY="14.0" text="Name:" />
-      <Label layoutX="14.0" layoutY="39.0" text="Coordinate X:" />
-      <Label layoutX="14.0" layoutY="65.0" text="Coordinate Y:" />
-      <Label layoutX="14.0" layoutY="89.0" text="StudentsCount:" />
-      <Label layoutX="14.0" layoutY="116.0" text="FormOfEducation:" />
-      <Label layoutX="14.0" layoutY="144.0" text="Semester:" />
-      <Label layoutX="14.0" layoutY="168.0" text="AdminName:" />
-      <Label layoutX="14.0" layoutY="191.0" text="Height:" />
-      <Label layoutX="14.0" layoutY="216.0" text="Weight:" />
-      <Label layoutX="14.0" layoutY="240.0" text="PassportID:" />
-      <Label layoutX="14.0" layoutY="267.0" text="Location X:" />
-      <Label layoutX="14.0" layoutY="291.0" text="Location Y:" />
-      <Label layoutX="14.0" layoutY="319.0" text="Location Name:" />
+      <Label layoutX="14.0" layoutY="14.0" text="%nameColumn.text" />
+      <Label layoutX="14.0" layoutY="39.0" text="%coordinateX.text" />
+      <Label layoutX="14.0" layoutY="65.0" text="%coordinateY.text" />
+      <Label layoutX="14.0" layoutY="89.0" text="%studentsCountColumn.text" />
+      <Label layoutX="14.0" layoutY="116.0" text="%formOfEducationColumn.text" />
+      <Label layoutX="14.0" layoutY="144.0" text="%semesterColumn.text" />
+      <Label layoutX="14.0" layoutY="168.0" text="%adminNameColumn.text" />
+      <Label layoutX="14.0" layoutY="191.0" text="%heightColumn.text" />
+      <Label layoutX="14.0" layoutY="216.0" text="%weightColumn.text" />
+      <Label layoutX="14.0" layoutY="240.0" text="%passportIdColumn.text" />
+      <Label layoutX="14.0" layoutY="267.0" text="%locationX.text" />
+      <Label layoutX="14.0" layoutY="291.0" text="%locationY.text" />
+      <Label layoutX="14.0" layoutY="319.0" text="%locationNameColumn.text" />
       <TextField layoutX="155.0" layoutY="35.0" prefHeight="26.0" prefWidth="103.0" fx:id="xField" />
       <TextField fx:id="yField" layoutX="154.0" layoutY="60.0" prefHeight="26.0" prefWidth="103.0" />
       <TextField fx:id="studentsCountField" layoutX="155.0" layoutY="85.0" prefHeight="26.0" prefWidth="103.0" />
@@ -36,7 +36,7 @@
       <TextField fx:id="locationXField" layoutX="158.0" layoutY="262.0" prefHeight="26.0" prefWidth="103.0" />
       <TextField fx:id="locationYField" layoutX="158.0" layoutY="286.0" prefHeight="26.0" prefWidth="103.0" />
       <TextField fx:id="locationNameField" layoutX="158.0" layoutY="314.0" prefHeight="26.0" prefWidth="103.0" />
-      <Button fx:id="addElementButton" layoutX="114.0" layoutY="359.0" mnemonicParsing="false" onAction="#click" text="Add Element" />
+      <Button fx:id="addElementButton" layoutX="114.0" layoutY="359.0" mnemonicParsing="false" onAction="#click" text="%add.text" />
       <HBox alignment="CENTER" layoutY="394.0" prefHeight="26.0" prefWidth="301.0">
          <children>
             <Text fx:id="stateText" strokeType="OUTSIDE" strokeWidth="0.0">

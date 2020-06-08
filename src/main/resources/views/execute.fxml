@@ -13,9 +13,9 @@
       <ListView fx:id="selectedFiles" layoutY="27.0" prefHeight="311.0" prefWidth="600.0" />
       <HBox alignment="CENTER_LEFT" layoutY="338.0" prefHeight="62.0" prefWidth="600.0" spacing="15.0">
          <children>
-            <Button fx:id="oneFileButton" mnemonicParsing="false" onAction="#clickOneFileButton" text="Select one file" />
-            <Button fx:id="multiFileButton" mnemonicParsing="false" onAction="#clickMultiFileButton" text="Select multi files" />
-            <Button fx:id="executeButton" mnemonicParsing="false" onAction="#clickExecuteButton" text="Execute" />
+            <Button fx:id="oneFileButton" mnemonicParsing="false" onAction="#clickOneFileButton" text="%selectOne.text" />
+            <Button fx:id="multiFileButton" mnemonicParsing="false" onAction="#clickMultiFileButton" text="%selectMulti.text" />
+            <Button fx:id="executeButton" mnemonicParsing="false" onAction="#clickExecuteButton" text="%execute.text" />
          </children>
          <padding>
             <Insets left="10.0" />
@@ -26,7 +26,7 @@
             <Insets left="15.0" />
          </opaqueInsets>
          <children>
-            <Label layoutX="10.0" layoutY="14.0" text="Selected files:">
+            <Label layoutX="10.0" layoutY="14.0" text="%selectedFiles.text">
                <padding>
                   <Insets left="15.0" />
                </padding>

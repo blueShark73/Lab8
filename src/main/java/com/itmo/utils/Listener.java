@@ -19,13 +19,7 @@ import java.net.SocketAddress;
 public class Listener extends Thread {
     private int port;
     private String host;
-    private MainController mainController;
     private static final int SIZE = 65536;
-
-    public void changeController(MainController mainController){
-        this.mainController = mainController;
-        mainController.getPainter().run(mainController);
-    }
 
     @Override
     public void run() {
@@ -39,13 +33,13 @@ public class Listener extends Thread {
             byte[] data = new SerializationManager<Command>().writeObject(command);
             DatagramPacket packet = new DatagramPacket(data, data.length, socketAddress);
             datagramSocket.send(packet);
-            mainController.getPainter().run(mainController);
+            UIMain.mainController.getPainter().run(UIMain.mainController);
             while (true) {
                 data = new byte[SIZE];
                 packet = new DatagramPacket(data, data.length);
                 datagramSocket.receive(packet);
                 ServerNotification notification = serializationManager.readObject(packet.getData());
-                mainController.getPainter().addNotification(notification);
+                UIMain.mainController.getPainter().addNotification(notification);
             }
 
         } catch (IOException | ClassNotFoundException e) {
