@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="110.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.itmo.client.controllers.HelpController">
+   <children>
+      <TextArea fx:id="textArea" prefHeight="108.0" prefWidth="498.0">
+         <font>
+            <Font size="13.0" />
+         </font></TextArea>
+   </children>
+</AnchorPane>

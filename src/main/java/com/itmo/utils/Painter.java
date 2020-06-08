@@ -16,6 +16,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class Painter {
     private static final double HEIGHT = 24, WIDTH = 24;
+    public static final double MIN_DISTANCE=10;
     @Setter
     private Canvas canvas;
     private ArrayBlockingQueue<ServerNotification> queue = new ArrayBlockingQueue<>(1000);

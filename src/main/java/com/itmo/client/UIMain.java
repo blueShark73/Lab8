@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 public class UIMain extends Application {
     public static String USERNAME;
-    public static final int MIN_DISTANCE = 10;
     public static MainController mainController;
     public static AuthController authController;
     public static Client client;
@@ -40,11 +39,13 @@ public class UIMain extends Application {
         resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"));
         Parent root = FXMLLoader.load(getClass().getResource("/views/main.fxml"), resourceBundle);
         stage.setScene(new Scene(root));
+        stage.setTitle("JavaFX application by Dyakonov Michail");
         stage.show();
 
         Parent auth = FXMLLoader.load(getClass().getResource("/views/auth.fxml"));
         Stage authStage = new Stage();
         authStage.setScene(new Scene(auth));
+        authStage.setTitle("Hi");
         authStage.show();
 
         Thread.setDefaultUncaughtExceptionHandler(UIMain::exceptionHandler);

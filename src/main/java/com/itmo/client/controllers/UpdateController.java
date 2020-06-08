@@ -20,6 +20,7 @@ import com.itmo.utils.FieldsValidator;
 import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.ResourceBundle;
 
@@ -87,12 +88,13 @@ public class UpdateController implements Initializable {
             Person person = new Person(adminNameField.getText(), Long.parseLong(heightField.getText()), Long.parseLong(weightField.getText()),
                     passportIdField.getText(), new Location(Double.parseDouble(locationXField.getText()), Long.parseLong(locationYField.getText()), locationNameField.getText()));
             group.setGroupAdmin(person);
-            group.setCreationDate(DateTimeAdapter.parseToZonedDateTime(selectedStudyGroup.getCreationDate()));
+            group.setCreationDate(DateTimeAdapter.parseToZonedDateTime(selectedStudyGroup.getCreationDate(), new SimpleDateFormat(UIMain.resourceBundle.getString("dateFormat"))));
             group.setId(Long.parseLong(idLabel.getText()));
             group.setOwner(new User(selectedStudyGroup.getOwner()));
         } catch (NumberFormatException | ParseException e) {
             stateText.setText("Parsing error, check values");
             stateText.setFill(Color.RED);
+            e.printStackTrace();
             return;
         }
         StudyGroupForUITable studyGroupForUITable = new StudyGroupForUITable(group, DateTimeAdapter.defaultDateFormat);

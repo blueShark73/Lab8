@@ -45,7 +45,7 @@
             <Button fx:id="executeButton" mnemonicParsing="false" onAction="#clickExecuteButton" text="%execute.text" />
             <Button fx:id="sumButton" mnemonicParsing="false" onAction="#clickSumButton" text="%sum.text" />
                 <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clickClearButton" text="%removeAll.text" />
-                <Button fx:id="helpButton" mnemonicParsing="false" text="%help.text" />
+                <Button fx:id="helpButton" mnemonicParsing="false" text="%help.text" onAction="#clickHelpButton"/>
                 <Button fx:id="historyButton" mnemonicParsing="false" onAction="#clickHistoryButton" text="%history.text" />
                 <Button fx:id="infoButton" mnemonicParsing="false" onAction="#clickInfoButton" text="%info.text" />
                 <Button fx:id="removeButton" layoutX="533.0" layoutY="10.0" mnemonicParsing="false" onAction="#clickRemoveButton" text="%remove.text" />

@@ -8,6 +8,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -69,31 +70,31 @@ public class DataBaseManager {
 
     //загрузка коллекции в память
     public CopyOnWriteArraySet<StudyGroup> getCollectionFromDatabase() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("select * from " + TABLE_NAME);
+        PreparedStatement statement = connection.prepareStatement(Queries.STUDYGROUPS);
         ResultSet resultSet = statement.executeQuery();
         CopyOnWriteArraySet<StudyGroup> collection = new CopyOnWriteArraySet<>();
         while (resultSet.next()) {
-            Coordinates coordinates = new Coordinates(resultSet.getLong("coordinate_x"), resultSet.getLong("coordinate_y"));
-            Long studentsCount = resultSet.getLong("students_count") == 0 ? null : resultSet.getLong("students_count");
-            Long height = resultSet.getLong("height") == 0 ? null : resultSet.getLong("height");
+            Coordinates coordinates = new Coordinates(resultSet.getLong(3), resultSet.getLong(4));
+            Long studentsCount = resultSet.getLong(6) == 0 ? null : resultSet.getLong(6);
+            Long height = resultSet.getLong(10) == 0 ? null : resultSet.getLong(10);
             Person person = new Person(
-                    resultSet.getString("admin_name"),
+                    resultSet.getString(9),
                     height,
-                    resultSet.getLong("weight"),
-                    resultSet.getString("passport_id"),
-                    new Location(resultSet.getDouble("x_admin"), resultSet.getLong("y_admin"), resultSet.getString("location_name"))
+                    resultSet.getLong(11),
+                    resultSet.getString(12),
+                    new Location(resultSet.getDouble(13), resultSet.getLong(14), resultSet.getString(15))
             );
-            User user = new User(resultSet.getString("owner"));
+            User user = new User(resultSet.getString(16));
             Color userColor = getUserColor(user);
             user.setColor(userColor.getRed(), userColor.getGreen(), userColor.getBlue());
             StudyGroup studyGroup = new StudyGroup(
-                    resultSet.getLong("id"),
-                    resultSet.getString("name"),
+                    resultSet.getLong(1),
+                    resultSet.getString(2),
                     coordinates,
-                    DateTimeAdapter.parseToZonedDateTime(resultSet.getTimestamp("creation_date")),
+                    DateTimeAdapter.parseToZonedDateTime(resultSet.getTimestamp(5)),
                     studentsCount,
-                    FormOfEducation.valueOf(resultSet.getString("form_of_education")),
-                    Semester.valueOf(resultSet.getString("semester")),
+                    FormOfEducation.valueOf(resultSet.getString(7)),
+                    Semester.valueOf(resultSet.getString(8)),
                     person,
                     user,
                     new Scanner(System.in)
@@ -106,29 +107,31 @@ public class DataBaseManager {
     //добаление нового элемента
     public boolean addGroup(StudyGroup studyGroup) {
         try {
-            long id = generate_id();
+            long groupId = generate_id("studygroups_id");
+            long personId = generate_id("persons_id");
+            long coordinatesId = generate_id("coordinates_id");
+            long locationId = generate_id("locations_id");
             Person admin = studyGroup.getGroupAdmin();
             Coordinates coordinates = studyGroup.getCoordinates();
             Location location = admin.getLocation();
-            PreparedStatement statement = connection.prepareStatement("insert into " + TABLE_NAME + " values (?, ?, ?, ?, ?, ?, cast (? as form_of_education), cast (? as semester), ?, ?, ?, ?, ?, ?, ?, ?)");
-            statement.setLong(1, id);
+
+            PreparedStatement statement = connection.prepareStatement(Queries.INSERT_GROUP);
+            statement.setLong(1, groupId);
             statement.setString(2, studyGroup.getName());
-            statement.setLong(3, coordinates.getX());
-            statement.setLong(4, coordinates.getY());
-            statement.setObject(5, DateTimeAdapter.parseToTimesTamp(studyGroup.getCreationDate()));
-            statement.setLong(6, studyGroup.getStudentsCount());
-            statement.setObject(7, studyGroup.getFormOfEducation().getEnglish());
-            statement.setObject(8, studyGroup.getSemesterEnum().getEnglish());
-            statement.setString(9, admin.getName());
-            statement.setLong(10, admin.getHeight());
-            statement.setLong(11, admin.getWeight());
-            statement.setString(12, admin.getPassportID());
-            statement.setDouble(13, location.getX());
-            statement.setLong(14, location.getY());
-            statement.setString(15, location.getName());
-            statement.setString(16, studyGroup.getOwner().getName());
-            studyGroup.setId(id);
+            statement.setLong(3, coordinatesId);
+            statement.setObject(4, DateTimeAdapter.parseToTimesTamp(studyGroup.getCreationDate()));
+            statement.setLong(5, studyGroup.getStudentsCount());
+            statement.setObject(6, studyGroup.getFormOfEducation().getEnglish());
+            statement.setObject(7, studyGroup.getSemesterEnum().getEnglish());
+            statement.setLong(8, personId);
+            statement.setLong(9, studyGroup.getOwner().getId());
             statement.execute();
+
+            insertCoordinates(coordinates, coordinatesId);
+            insertPerson(admin, personId, locationId);
+            insertLocation(location, locationId);
+
+            studyGroup.setId(groupId);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -136,10 +139,38 @@ public class DataBaseManager {
         }
     }
 
+    public void insertPerson(Person admin, long personId, long locationId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(Queries.INSERT_PERSON);
+        statement.setLong(1, personId);
+        statement.setString(2, admin.getName());
+        statement.setLong(3, admin.getHeight());
+        statement.setLong(4, admin.getWeight());
+        statement.setString(5, admin.getPassportID());
+        statement.setLong(6, locationId);
+        statement.execute();
+    }
+
+    public void insertCoordinates(Coordinates coordinates, long coordinatesId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(Queries.INSERT_COORDINATES);
+        statement.setLong(1, coordinatesId);
+        statement.setLong(2, coordinates.getX());
+        statement.setLong(3, coordinates.getY());
+        statement.execute();
+    }
+
+    public void insertLocation(Location location, long locationId) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(Queries.INSERT_LOCATION);
+        statement.setLong(1, locationId);
+        statement.setDouble(2, location.getX());
+        statement.setLong(3, location.getY());
+        statement.setString(4, location.getName());
+        statement.execute();
+    }
+
     //удаление элемента по id
     public int remove(long id) {
         try {
-            PreparedStatement statement = connection.prepareStatement("delete from " + TABLE_NAME + " where id=?");
+            PreparedStatement statement = connection.prepareStatement(Queries.DELETE_GROUP);
             statement.setLong(1, id);
             return statement.executeUpdate();
         } catch (SQLException e) {
@@ -154,14 +185,17 @@ public class DataBaseManager {
         String hash = passEncoder.getHash(user.getPass() + salt);
         Color userColor = user.getColor();
         try {
-            PreparedStatement statement = connection.prepareStatement("insert into " + USERS_TABLE + " values (?, ?, ?, ?, ?, ?)");
-            statement.setString(1, user.getName());
-            statement.setString(2, hash);
-            statement.setString(3, salt);
-            statement.setDouble(4, userColor.getRed());
-            statement.setDouble(5, userColor.getGreen());
-            statement.setDouble(6, userColor.getBlue());
+            long userId = generate_id("users_id");
+            PreparedStatement statement = connection.prepareStatement(Queries.INSERT_USER);
+            statement.setLong(1, userId);
+            statement.setString(2, user.getName());
+            statement.setString(3, hash);
+            statement.setString(4, salt);
+            statement.setDouble(5, userColor.getRed());
+            statement.setDouble(6, userColor.getGreen());
+            statement.setDouble(7, userColor.getBlue());
             statement.execute();
+            user.setId(userId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -169,7 +203,7 @@ public class DataBaseManager {
 
     public Color getUserColor(User user){
         try {
-            PreparedStatement statement = connection.prepareStatement("select red, green, blue from " + USERS_TABLE + " where name = ?");
+            PreparedStatement statement = connection.prepareStatement(Queries.SELECT_USER_BY_NAME);
             statement.setString(1, user.getName());
             ResultSet resultSet = statement.executeQuery();
             Color color = null;
@@ -186,17 +220,21 @@ public class DataBaseManager {
     //ищем пользователя
     public boolean containsUser(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from " + USERS_TABLE + " where name = ?");
+            PreparedStatement statement = connection.prepareStatement(Queries.SELECT_USER_BY_NAME);
             statement.setString(1, user.getName());
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) return false;
             String salt = resultSet.getString("salt");
             String hash = passEncoder.getHash(user.getPass() + salt);
-            statement = connection.prepareStatement("select * from " + USERS_TABLE + " where name = ? and password = ? and salt=?");
+            statement = connection.prepareStatement(Queries.SELECT_USER_BY_PASS);
             statement.setString(1, user.getName());
             statement.setString(2, hash);
-            statement.setString(3, salt);
-            return statement.executeQuery().next();
+            resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                user.setId(resultSet.getLong("id"));
+                return true;
+            }
+            return false;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -206,10 +244,9 @@ public class DataBaseManager {
     //ищем пользователя только по имени
     public boolean containsUserName(String name) {
         try {
-            PreparedStatement statement = connection.prepareStatement("select * from " + USERS_TABLE + " where name = ?");
+            PreparedStatement statement = connection.prepareStatement(Queries.CHECK_UNIQUE_USER_NAME);
             statement.setString(1, name);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next();
+            return statement.executeQuery().next();
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -217,18 +254,19 @@ public class DataBaseManager {
     }
 
     //генерируем id с помощью sequence
-    public long generate_id() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement("select nextval('generate_id')");
+    public long generate_id(String sequence) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(Queries.GENERATE_ID);
+        statement.setString(1, sequence);
         ResultSet resultSet = statement.executeQuery();
         resultSet.next();
         return resultSet.getLong("nextval");
     }
 
     //удаляем все элементы, принадлежащие пользователю
-    public boolean removeAll(String userName) {
+    public boolean removeAll(User user) {
         try {
-            PreparedStatement statement = connection.prepareStatement("delete from " + TABLE_NAME + " where owner=?");
-            statement.setString(1, userName);
+            PreparedStatement statement = connection.prepareStatement(Queries.DELETE_ALL_GROUPS);
+            statement.setLong(1, user.getId());
             statement.execute();
             return true;
         } catch (SQLException e) {
@@ -243,24 +281,22 @@ public class DataBaseManager {
         Location location = admin.getLocation();
         Coordinates coordinates = studyGroup.getCoordinates();
         try {
-            PreparedStatement statement = connection.prepareStatement(
-                    "update " + TABLE_NAME + " set name=?, coordinate_x=? , coordinate_y=?, creation_date=?, students_count=?, form_of_education=cast (? as form_of_education)," +
-                            " semester=cast (? as semester), admin_name=?, height=?, weight=?, passport_id=?, x_admin=?, y_admin=?, location_name=? where id = ?");
-            statement.setLong(15, id);
+            long personId = generate_id("persons_id");
+            long coordinatesId = generate_id("coordinates_id");
+            long locationId = generate_id("locations_id");
+
+            insertPerson(admin, personId, locationId);
+            insertCoordinates(coordinates, coordinatesId);
+            insertLocation(location, locationId);
+
+            PreparedStatement statement = connection.prepareStatement(Queries.UPDATE_GROUP);
             statement.setString(1, studyGroup.getName());
-            statement.setLong(2, coordinates.getX());
-            statement.setLong(3, coordinates.getY());
-            statement.setObject(4, studyGroup.getCreationDate().toLocalDate());
-            statement.setLong(5, studyGroup.getStudentsCount());
-            statement.setObject(6, studyGroup.getFormOfEducation().getEnglish());
-            statement.setObject(7, studyGroup.getSemesterEnum().getEnglish());
-            statement.setString(8, admin.getName());
-            statement.setLong(9, admin.getHeight());
-            statement.setLong(10, admin.getWeight());
-            statement.setString(11, admin.getPassportID());
-            statement.setDouble(12, location.getX());
-            statement.setLong(13, location.getY());
-            statement.setString(14, location.getName());
+            statement.setLong(2, coordinatesId);
+            statement.setLong(3, studyGroup.getStudentsCount());
+            statement.setObject(4, studyGroup.getFormOfEducation().getEnglish());
+            statement.setObject(5, studyGroup.getSemesterEnum().getEnglish());
+            statement.setLong(6, personId);
+            statement.setLong(7, id);
             return statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

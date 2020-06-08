@@ -251,6 +251,19 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    private void clickHelpButton(){
+        try{
+            Parent parent = FXMLLoader.load(getClass().getResource("/views/help.fxml"), UIMain.resourceBundle);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(parent));
+            stage.setTitle("Good luck");
+            stage.show();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     private void clickSumButton() {
         try {
             Response response = UIMain.client.sendCommandAndReceiveAnswer(new SumOfStudentsCountCommand());
@@ -526,7 +539,7 @@ public class MainController implements Initializable {
     private void clickCanvas(MouseEvent event) {
         int eventX = (int) event.getX();
         int eventY = (int) event.getY();
-        int minDistance = UIMain.MIN_DISTANCE;
+        double minDistance = Painter.MIN_DISTANCE;
         StudyGroupForUITable nearerStudyGroup = null;
         for (StudyGroupForUITable studyGroup : studyGroups) {
             int distance = painter.calculateDistance(painter.fromNormalXToCanvasX(studyGroup.getX().intValue()), eventX,
@@ -757,7 +770,7 @@ public class MainController implements Initializable {
                 adminNameColumn.getText(), heightColumn.getText(), weightColumn.getText(), passportIdColumn.getText(),
                 locationNameColumn.getText(), ownerColumn.getText());
         fieldChoiceBox.setItems(fields);
-        fieldChoiceBox.setValue("Name");
+        fieldChoiceBox.setValue(nameColumn.getText());
 
         ObservableList<String> languages = FXCollections.observableArrayList("Русский", "Español", "Íslensku", "Polskie");
         langChoiceBox.setItems(languages);

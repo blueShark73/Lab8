@@ -4,7 +4,6 @@ import com.itmo.app.*;
 import com.itmo.client.StudyGroupForUITable;
 import com.itmo.client.UIMain;
 import com.itmo.client.User;
-import com.itmo.server.Response;
 import com.itmo.utils.DateTimeAdapter;
 import com.itmo.utils.FieldsValidator;
 import javafx.event.ActionEvent;
@@ -105,6 +104,8 @@ public class AddController implements Initializable {
                     UIMain.mainController.getNameTextField().setText("");
                     UIMain.mainController.getStateText().setFill(Color.GREEN);
                     UIMain.mainController.getStateText().setText("Element added");
+                    UIMain.mainController.setMaxButton(false);
+                    UIMain.mainController.setMinButton(false);
                     return;
                 }
                 stateText.setText("Element is not added");

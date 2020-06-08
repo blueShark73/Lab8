@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ClearCommand extends Command {
     @Override
     public String execute(Application application, @NonNull Session session) {
-        application.getDataBaseManager().removeAll(session.getUser().getName());
+        application.getDataBaseManager().removeAll(session.getUser());
         application.getCollection().forEach(studyGroup -> {
             if (studyGroup.getOwner().getName().equals(session.getUser().getName())) {
                 application.getIdList().remove(studyGroup.getId());
