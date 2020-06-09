@@ -43,6 +43,7 @@ public class AuthController implements Initializable {
     private void sendAndHandler(Stage currentStage, MainController mainController, Command command) throws IOException, ClassNotFoundException{
         Response response = UIMain.client.sendCommandAndReceiveAnswer(command);
         if (response.isSuccessfullyExecute()) {
+            UIMain.mainStage.show();
             currentStage.close();
             mainController.setValues();
             UIMain.USERNAME = userNameTextField.getText();

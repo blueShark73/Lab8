@@ -513,16 +513,16 @@ public class MainController implements Initializable {
     private void clickTranslate() {
         switch (langChoiceBox.getValue()) {
             case "Русский":
-                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"));
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"), UIMain.loader);
                 break;
             case "Polskie":
-                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("POL"));
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("POL"), UIMain.loader);
                 break;
             case "Íslensku":
-                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("ICE"));
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("ICE"), UIMain.loader);
                 break;
             case "Español":
-                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("SPA"));
+                UIMain.resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("SPA"), UIMain.loader);
                 break;
         }
         UIMain.state = new State(studyGroups, langChoiceBox.getValue(), listener, painter);

@@ -8,9 +8,13 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -22,6 +26,7 @@ public class UIMain extends Application {
     public static ResourceBundle resourceBundle;
     public static Stage mainStage;
     public static State state;
+    public static ClassLoader loader;
 
     public static final String HOST = "localhost";
     public static final int PORT = 3876;
@@ -36,11 +41,15 @@ public class UIMain extends Application {
         handler.setDefaultPack();
         client.setHandler(handler);
 
-        resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"));
+        String path = "C:\\Users\\79516\\Lab8\\src\\main\\resources";
+        File file = new File(path);
+        URL[] urls = {file.toURI().toURL()};
+        loader = new URLClassLoader(urls);
+
+        resourceBundle = ResourceBundle.getBundle("locals", Locale.forLanguageTag("RU"), loader);
         Parent root = FXMLLoader.load(getClass().getResource("/views/main.fxml"), resourceBundle);
         stage.setScene(new Scene(root));
         stage.setTitle("JavaFX application by Dyakonov Michail");
-        stage.show();
 
         Parent auth = FXMLLoader.load(getClass().getResource("/views/auth.fxml"));
         Stage authStage = new Stage();
