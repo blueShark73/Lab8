@@ -8,6 +8,7 @@ import com.itmo.commands.*;
 import com.itmo.server.Response;
 import com.itmo.utils.Painter;
 import com.itmo.utils.StudyGroupAdapter;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.TextFieldTableCell;
 import com.itmo.app.FormOfEducation;
 import com.itmo.utils.FieldsValidator;
@@ -474,7 +475,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void clickUpdateButton(ActionEvent event) {
+    private void clickUpdateButton() {
         int index = tableView.getSelectionModel().getFocusedIndex();
         selectedStudyGroupForUITable = studyGroups.get(index);
         if (!checkPermission(selectedStudyGroupForUITable)) return;
@@ -489,18 +490,18 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void clickAddButton(ActionEvent event) {
+    private void clickAddButton() {
         clickAddButtons();
     }
 
     @FXML
-    private void clickAddIfMinButton(ActionEvent event) {
+    private void clickAddIfMinButton() {
         setMinButton(true);
         clickAddButtons();
     }
 
     @FXML
-    private void clickAddIfMaxButton(ActionEvent event) {
+    private void clickAddIfMaxButton() {
         setMaxButton(true);
         clickAddButtons();
     }
@@ -622,7 +623,7 @@ public class MainController implements Initializable {
 
         studentsCountColumn.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         studentsCountColumn.setOnEditCommit(event -> {
-            StudyGroupForUITable group = event.getTableView().getItems().get(event.getTablePosition().getRow());
+            StudyGroupForUITable group = studyGroups.get(event.getTablePosition().getRow());
             if (!checkPermission(group)) {
                 tableView.refresh();
                 return;
@@ -636,7 +637,7 @@ public class MainController implements Initializable {
             callUpdate(StudyGroupAdapter.convert(group));
         });
 
-        semesterColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        semesterColumn.setCellFactory(ComboBoxTableCell.forTableColumn(Semester.getItems()));
         semesterColumn.setOnEditCommit(event -> {
             StudyGroupForUITable group = studyGroups.get(event.getTablePosition().getRow());
             if (!checkPermission(group)) {
@@ -652,7 +653,7 @@ public class MainController implements Initializable {
             callUpdate(StudyGroupAdapter.convert(group));
         });
 
-        formOfEducationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        formOfEducationColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FormOfEducation.getItems()));
         formOfEducationColumn.setOnEditCommit(event -> {
             StudyGroupForUITable group = studyGroups.get(event.getTablePosition().getRow());
             if (!checkPermission(group)) {
@@ -686,7 +687,7 @@ public class MainController implements Initializable {
 
         heightColumn.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         heightColumn.setOnEditCommit(event -> {
-            StudyGroupForUITable group = event.getTableView().getItems().get(event.getTablePosition().getRow());
+            StudyGroupForUITable group = studyGroups.get(event.getTablePosition().getRow());
             if (!checkPermission(group)) {
                 tableView.refresh();
                 return;
@@ -702,7 +703,7 @@ public class MainController implements Initializable {
 
         weightColumn.setCellFactory(TextFieldTableCell.forTableColumn(new LongStringConverter()));
         weightColumn.setOnEditCommit(event -> {
-            StudyGroupForUITable group = event.getTableView().getItems().get(event.getTablePosition().getRow());
+            StudyGroupForUITable group = studyGroups.get(event.getTablePosition().getRow());
             if (!checkPermission(group)) {
                 tableView.refresh();
                 return;

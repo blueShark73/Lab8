@@ -62,7 +62,7 @@ public class AuthController implements Initializable {
                     sendAndHandler(currentStage, mainController, command);
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
-                    authState.setFill(Color.FUCHSIA);
+                    authState.setFill(Color.YELLOW);
                     authState.setText("Problems on server");
                     return;
                 }
@@ -89,7 +89,7 @@ public class AuthController implements Initializable {
                     sendAndHandler(currentStage, mainController, command);
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
-                    authState.setFill(Color.FUCHSIA);
+                    authState.setFill(Color.YELLOW);
                     authState.setText("Problems on server");
                     return;
                 }

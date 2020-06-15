@@ -45,9 +45,9 @@ public class DateTimeAdapter {
         return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 
+
     public static ZonedDateTime parseToZonedDateTime(String string, DateFormat format) throws ParseException {
         Date date = format.parse(string);
-        System.out.println(date);
         return ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
     }
 }

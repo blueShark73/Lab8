@@ -1,7 +1,6 @@
 package com.itmo.app.builder;
 
 import com.itmo.app.*;
-import com.itmo.app.builder.Builder;
 import com.itmo.client.UIMain;
 import com.itmo.utils.FieldsValidator;
 import lombok.NoArgsConstructor;
